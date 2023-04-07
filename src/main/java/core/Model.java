@@ -1,21 +1,21 @@
 package core;
 //the interface which represents 3D models
 
-public interface Model {
+public interface model{
 	//update the model, perform AI actions if there is any
 	public void update();
 	
 	//get a rough 3D boundary of the model in camera coordinate
-	public Polygon3D[] getBoundary();
+	public polygon3D[] getBoundary();
 	
 	//get  2D boundary of this model (will be used for collision detection)
-	public Rectangle2D getBoundary2D();
+	public rectangle2D getBoundary2D();
 	
 	//get centre of this model in camera coordinate
-	public Vector getCentre();
+	public vector getCentre();
 	
 	//get centre of this model in world coordinate
-	public Vector getRealCentre();
+	public vector getRealCentre();
 	
 	//draw the polygons of the model
 	public void draw();

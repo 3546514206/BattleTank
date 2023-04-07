@@ -1,5 +1,5 @@
 package core;
-public final class Vector {
+public final class vector{
 	//x, y, z component of the vector
 	public double x, y, z;
 
@@ -10,7 +10,7 @@ public final class Vector {
 
 	public static double old_X, old_Y, old_Z, zInverse, lengthInverse;
 
-	public Vector(double x, double y, double z){
+	public vector(double x, double y, double z){
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -19,7 +19,7 @@ public final class Vector {
 		updateLocation();
 	}
 
-	public void add(Vector v){
+	public void add(vector v){
 		x+=v.x;
 		y+=v.y;
 		z+=v.z;
@@ -31,19 +31,19 @@ public final class Vector {
 		z+=c;
 	}
 
-	public void add(Vector v, double scaler){
+	public void add(vector v, double scaler){
 		x+=v.x*scaler;
 		y+=v.y*scaler;
 		z+=v.z*scaler;
 	}
 
-	public void subtract(Vector v, double scaler){
+	public void subtract(vector v, double scaler){
 		x-=v.x*scaler;
 		y-=v.y*scaler;
 		z-=v.z*scaler;
 	}
 
-	public void subtract(Vector v){
+	public void subtract(vector v){
 		x-=v.x;
 		y-=v.y;
 		z-=v.z;
@@ -70,7 +70,7 @@ public final class Vector {
 	}
 
 	//retrun the dot product of this vector with another vector
-	public double dot(Vector v){
+	public double dot(vector v){
 		return x*v.x + y*v.y + z*v.z;
 	}
 
@@ -79,14 +79,14 @@ public final class Vector {
 	}
 
 	//return the cross product of this vector with another vector
-	public final Vector cross(Vector v){
-		return new Vector(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
+	public final vector cross(vector v){
+		return new vector(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
 	}
 
 	//rotate the vector along Y axis
 	public void  rotate_XZ(int angle){
-		double sin = GameData.sin[angle];
-		double cos = GameData.cos[angle];
+		double sin = gameData.sin[angle];
+		double cos = gameData.cos[angle];
 		old_X = x;
 		old_Z = z;
 		x = cos*old_X - sin*old_Z;
@@ -95,8 +95,8 @@ public final class Vector {
 
 	//rotate the vector along X axis
 	public void rotate_YZ(int angle){
-		double sin = GameData.sin[angle];
-		double cos = GameData.cos[angle];
+		double sin = gameData.sin[angle];
+		double cos = gameData.cos[angle];
 		old_Y = y;
 		old_Z = z;
 		y = cos*old_Y - sin*old_Z;
@@ -105,8 +105,8 @@ public final class Vector {
 	
 	//rotate the vector along Z axis
 	public void rotate_XY(int angle){
-		double sin = GameData.sin[angle];
-		double cos = GameData.cos[angle];
+		double sin = gameData.sin[angle];
+		double cos = gameData.cos[angle];
 		old_X = x;
 		old_Y = y;
 		x = cos*old_X - sin*old_Y;
@@ -114,7 +114,7 @@ public final class Vector {
 	}
 
 	//set all the component equal to the corresponding component of a given vector
-	public void set(Vector v){
+	public void set(vector v){
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -146,13 +146,13 @@ public final class Vector {
 	}
 	
 	//set the 2D location of this vector to the 2D location of a given vector
-	public void setScreenLocation(Vector v){
+	public void setScreenLocation(vector v){
 		screenX = v.screenX;
 		screenY = v.screenY;
 	}
 
-	public Vector myClone(){
-		return new Vector(x,y,z);
+	public vector myClone(){
+		return new vector(x,y,z);
 	}
 
 	public String toString(){

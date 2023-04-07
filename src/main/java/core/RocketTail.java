@@ -1,43 +1,43 @@
 package core;
 //a particle system that resembles the tail of a rocket
-public class RocketTail extends SolidObject {
+public class rocketTail extends solidObject{
 	
 	//particles
-	public Vector[] particles;
+	public vector[] particles;
 	
 	//alpha mask
 	public int ALPHA=0xFF000000; 
 	
 	//temp vector
-	public Vector temp;
+	public vector temp;
 	
 	//direction of particles
-	public Vector[] directions;
+	public vector[] directions;
 	
-	public RocketTail(Vector centre){
+	public rocketTail(vector centre){
 		start = centre.myClone();
 		this.centre = centre;
 		
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 		//boundary of this model has a cubic shape (ie l = w)
 		modelType = 4;  
 		makeBoundary(0.01, 0.025, 0.01);
 		
 		//init particles and particle directions
-		particles = new Vector[15];
-		directions = new Vector[15];
+		particles = new vector[15];
+		directions = new vector[15];
 		for(int i = 0; i < 15; i ++){
 			particles[i] = centre.myClone();
-			directions[i] = new Vector(0.00005 * GameData.getRandom() - 0.0025, 0.00005 * GameData.getRandom()- 0.0025, 0.00005 * GameData.getRandom()- 0.0025);
+			directions[i] = new vector(0.00005 * gameData.getRandom() - 0.0025, 0.00005 * gameData.getRandom()- 0.0025, 0.00005 * gameData.getRandom()- 0.0025);
 			directions[i].scale(0.8);
 		}
 		
 		lifeSpan = 35;
 		
-		temp = new Vector(0,0,0);
+		temp = new vector(0,0,0);
 	}
 	
 	public void update(){
@@ -45,7 +45,7 @@ public class RocketTail extends SolidObject {
 		
 		lifeSpan--;
 		
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 		
 		//update boundary
 		for(int i = 0; i < 5; i++)
@@ -58,9 +58,9 @@ public class RocketTail extends SolidObject {
 		//find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 	}
 	
 	//draw the particle system
@@ -72,9 +72,9 @@ public class RocketTail extends SolidObject {
 		
 		for(int i = 0; i < particles.length; i++){
 			temp.set(particles[i]);
-			temp.subtract(Camera.position);
-			temp.rotate_XZ(Camera.XZ_angle);
-			temp.rotate_YZ(Camera.YZ_angle);
+			temp.subtract(camera.position);
+			temp.rotate_XZ(camera.XZ_angle);
+			temp.rotate_YZ(camera.YZ_angle);
 			temp.updateLocation();
 			
 			if(temp.screenX >= 2 && temp.screenX <638 && temp.screenY >=0 && temp.screenY < 480){
@@ -105,14 +105,14 @@ public class RocketTail extends SolidObject {
 					spriteIndex = 7;
 				}
 				
-				for(int j = 0; j < GameData.size[spriteIndex].length; j++){
-					position = centre + GameData.size[spriteIndex][j];
+				for(int j = 0; j < gameData.size[spriteIndex].length; j++){
+					position = centre + gameData.size[spriteIndex][j];
 					if(position >= 0 && position < 307200){
-						color = Main.screen[position];
+						color = main.screen[position];
 						r=(((color>>16)&255)*factor)>>8;
 						g=(((color>>8)&255)*factor)>>8;
 						b=((color&255)*factor)>>8;
-						Main.screen[position]= ALPHA|(r<<16)|(g<<8)|b;
+						main.screen[position]= ALPHA|(r<<16)|(g<<8)|b;
 					}
 				}
 			}
@@ -120,7 +120,7 @@ public class RocketTail extends SolidObject {
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	

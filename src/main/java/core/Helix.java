@@ -2,13 +2,13 @@ package core;
 import java.awt.*;
 
 //a partical system that resemble the double helix trail of a railgun slug
-public class Helix extends SolidObject {
+public class helix extends solidObject{
 
 	//particles
-	public Vector[] particles;
+	public vector[] particles;
 	
 	//direction of particles
-	public Vector[] directions;
+	public vector[] directions;
 	
 	//color of particles
 	public int[] colors;
@@ -17,10 +17,10 @@ public class Helix extends SolidObject {
 	public int ALPHA=0xFF000000; 
 	
 	//temp vector
-	public Vector temp1 = new Vector(0,0,0);
-	public Vector temp2 = new Vector(0,0,0);
+	public vector temp1 = new vector(0,0,0);
+	public vector temp2 = new vector(0,0,0);
 	
-	public Helix(Vector centre, int angle){
+	public helix(vector centre, int angle){
 		start = centre.myClone();
 		this.centre = centre;
 		angle+=360;
@@ -28,9 +28,9 @@ public class Helix extends SolidObject {
 	
 	
 		
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 		
 		
@@ -39,11 +39,11 @@ public class Helix extends SolidObject {
 		makeBoundary(0.01, 0.025, 0.01);
 		
 		//create 2D boundary
-		boundary2D = new Rectangle2D(start.x - 0.01, start.z + 0.01, 0.02, 0.02);
+		boundary2D = new rectangle2D(start.x - 0.01, start.z + 0.01, 0.02, 0.02);	
 		
 		//init particles and particle directions
-		particles = new Vector[20];
-		directions = new Vector[20];
+		particles = new vector[20];
+		directions = new vector[20];
 		colors = new int[20];
 		int zAxisRotation = 0;
 	
@@ -61,7 +61,7 @@ public class Helix extends SolidObject {
 			particles[i] = temp1.myClone();
 			particles[i].add(directions[i]);
 			directions[i].scale(0.02);
-			colors[i] = new Color((int)(58 - 20* GameData.sin[zAxisRotation]), (int)(130 - 40* GameData.sin[zAxisRotation]), (int)(165 - 40* GameData.sin[zAxisRotation])).getRGB();
+			colors[i] = new Color((int)(58 - 20*gameData.sin[zAxisRotation]), (int)(130 - 40*gameData.sin[zAxisRotation]), (int)(165 - 40*gameData.sin[zAxisRotation])).getRGB(); 
 			zAxisRotation+=18;
 			temp1.add(temp2);
 			
@@ -72,7 +72,7 @@ public class Helix extends SolidObject {
 	
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	
@@ -87,7 +87,7 @@ public class Helix extends SolidObject {
 			return;
 		}
 		
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 		
 		//update boundary
 		for(int i = 0; i < 5; i++)
@@ -100,9 +100,9 @@ public class Helix extends SolidObject {
 		//find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		
 	}
 	
@@ -136,9 +136,9 @@ public class Helix extends SolidObject {
 		
 		for(int i = 19; i >=0; i--){
 			temp1.set(particles[i]);
-			temp1.subtract(Camera.position);
-			temp1.rotate_XZ(Camera.XZ_angle);
-			temp1.rotate_YZ(Camera.YZ_angle);
+			temp1.subtract(camera.position);
+			temp1.rotate_XZ(camera.XZ_angle);
+			temp1.rotate_YZ(camera.YZ_angle);
 			temp1.updateLocation();
 			
 		
@@ -160,17 +160,17 @@ public class Helix extends SolidObject {
 			
 				
 				
-				for(int j = 0; j < GameData.size[spriteIndex].length; j++){
-					position = centre + GameData.size[spriteIndex][j];
+				for(int j = 0; j < gameData.size[spriteIndex].length; j++){
+					position = centre + gameData.size[spriteIndex][j];
 					if(position >= 0 && position < 307200){
-						int bkgrd = Main.screen[position];
+						int bkgrd = main.screen[position];
 						
 						color = colors[i];
 						r=(alpha*(((bkgrd>>16)&255)-((color>>16)&255))>>8)+((color>>16)&255);
 						g=(alpha*(((bkgrd>>8)&255)-((color>>8)&255))>>8)+((color>>8)&255);
 						b=(alpha*((bkgrd&255)-(color&255))>>8)+(color&255);
 						
-						Main.screen[position]=  ALPHA|(r<<16)|(g<<8)|b;
+						main.screen[position]=  ALPHA|(r<<16)|(g<<8)|b;
 						
 					
 					}

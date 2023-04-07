@@ -2,13 +2,14 @@ package core;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.applet.*;
 import java.awt.image.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Main extends JFrame implements KeyListener, ActionListener, MouseMotionListener, MouseListener{
+public class main extends JFrame implements KeyListener, ActionListener, MouseMotionListener, MouseListener{
 	
 	private static final long serialVersionUID = 1L;
 	public Ticker t;
@@ -18,21 +19,21 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 	public static int[] stencilBuffer2;
 	public static short[] lightMap;
 	public BufferedImage doubleBuffer;
-	public core.Camera Camera;
-	public InputHandler myInputHandler;
-	public static Texture[] textures;
+	public camera Camera;
+	public inputHandler myInputHandler;
+	public static texture[] textures;
 	public static boolean[] terrainBuffer;
 	public static boolean terrainBufferFlag;
 	public static int polyCount;
 	public static JPanel panel;
 	
-	public static core.Terrain Terrain;
+	public static terrain Terrain;
 	
 	public static int timer;
 	public static long lastTime;
 	public static long tm;
 	
-	public static PlayerTank PT;
+	public static playerTank PT;
 	
 	//flag which indicate whether the user has terminated the current applet
 	public static boolean appletDestoried;
@@ -47,10 +48,10 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 	public static int screen_pixel_count = screen_w * screen_h;
 	
 	public static void main(String[] args){
-		new Main();
+		new main();
 	}
 	
-	public Main(){
+	public main(){
 		
 		setTitle("Battle Tank 2");
 		panel= (JPanel) this.getContentPane();
@@ -74,7 +75,7 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 		
 		Camera = null;
 		Terrain = null;
-		GameData.destory();
+		gameData.destory();
 		terrainBuffer = null;
 		System.gc();
 		
@@ -98,100 +99,100 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 		String imageFolder = "../Image/";
 		
 	
-		textures = new Texture[63];
+		textures = new texture[63];
 		try {
-			textures[0] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "normal");
-			textures[1] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "3.jpg")), 8, 8, "normal");
-			textures[2] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "beachSlope");
-			textures[3] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "oceanFloor");
-			textures[4] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "5.jpg")), 7, 7, "water");
-			textures[5] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "4.jpg")), 7, 7, "normal");
-			textures[6] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "6.jpg")), 8, 8, "normal");
-			textures[7] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "7.jpg")), 8, 8, "normal");
-			textures[8] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "8.jpg")), 7, 7, "shadow");
-			textures[9] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "9.jpg")), 5, 7, "normal");
-			textures[10] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "10.jpg")), 7, 7, "shadow");
-			textures[11] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "11.jpg")), 6, 6, "normal");
-			textures[12] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "12.jpg")), 8, 6, "normal");
-			textures[13] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "13.jpg")), 6, 6, "normal");
-			textures[14] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "14.jpg")), 7, 7, "shadow");
-			textures[15] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "15.jpg")), 7, 7, "shadow");
-			textures[16] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "16.jpg")), 1, 1, "normal");
-			textures[17] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "17.jpg")), 8, 8, "explosion");
-			textures[18] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "18.jpg")), 8, 8, "explosion");
-			textures[19] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "19.jpg")), 8, 8, "explosion");
-			textures[20] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "20.jpg")), 8, 8, "explosion");
-			textures[21] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "2.jpg")), 8, 8, "light");
-			textures[22] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "21.jpg")), 6, 6, "normal");
-			textures[23] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "22.jpg")), 6, 6, "normal");
-			textures[24] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "23.jpg")), 6, 6, "normal");
-			textures[25] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "24.jpg")), 1, 1, "normal");
-			textures[26] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "25.jpg")), 1, 1, "normal");
-			textures[27] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "26.jpg")), 6, 6, "normal");
-			textures[28] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "27.jpg")), 6, 6, "normal");
-			textures[29] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "28.jpg")), 6, 6, "normal");
-			textures[30] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "29.jpg")), 6, 6, "normal");
-			textures[31] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "30.jpg")), 6, 6, "normal");
-			textures[32] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "31.jpg")), 1, 1, "normal");
-			textures[33] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "32.jpg")), 6, 6, "normal");
-			textures[34] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "33.jpg")), 1, 1, "normal");
-			textures[35] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "34.jpg")), 6, 6, "normal");
-			textures[36] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "35.jpg")), 7, 7, "shadow");
-			textures[37] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "36.jpg")), 7, 7, "shadow");
-			textures[38] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "37.jpg")), 6, 6, "normal");
-			textures[39] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "38.jpg")), 1, 1, "normal");
-			textures[40] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "40.jpg")), 8, 8, "normal");
-			textures[41] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "41.jpg")), 7, 7, "normal");
-			textures[42] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "42.jpg")), 7, 7, "shadow");
-			textures[43] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "43.jpg")), 7, 7, "shadow");
-			textures[44] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "44.jpg")), 7, 7, "shadow");
-			textures[45] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "45.jpg")), 5, 5, "shadow");
-			textures[46] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "46.jpg")), 5, 5, "shadow");
-			textures[47] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "47.jpg")), 7, 7, "shadow");
-			textures[48] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "48.jpg")), 6, 6, "normal");
-			textures[49] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "49.jpg")), 1, 1, "normal");
-			textures[50] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "50.jpg")), 7, 7, "shadow");
-			textures[51] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "51.jpg")), 6, 6, "normal");
-			textures[52] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "52.jpg")), 1, 1, "normal");
-			textures[53] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "53.jpg")), 7, 7, "normal");
-			textures[54] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "54.jpg")), 5, 5, "normal");
-			textures[55] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "55.jpg")), 5, 5, "normal");
-			textures[56] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "56.jpg")), 7, 7, "shadow");
-			textures[57] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "57.jpg")), 6, 6, "smoke");
-			textures[58] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "58.jpg")), 6, 6, "normal");
-			textures[59] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "59.jpg")), 6, 6, "normal");
-			textures[60] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "60.jpg")), 6, 6, "normal");
-			textures[61] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "61.jpg")), 7, 7, "shadow");
-			textures[62] = new Texture(ImageIO.read(getClass().getResource(imageFolder + "62.jpg")), 8, 8, "normal");
+			textures[0] = new texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "normal");
+			textures[1] = new texture(ImageIO.read(getClass().getResource(imageFolder + "3.jpg")), 8, 8, "normal");
+			textures[2] = new texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "beachSlope");
+			textures[3] = new texture(ImageIO.read(getClass().getResource(imageFolder + "1.jpg")), 9, 9, "oceanFloor");
+			textures[4] = new texture(ImageIO.read(getClass().getResource(imageFolder + "5.jpg")), 7, 7, "water");
+			textures[5] = new texture(ImageIO.read(getClass().getResource(imageFolder + "4.jpg")), 7, 7, "normal");
+			textures[6] = new texture(ImageIO.read(getClass().getResource(imageFolder + "6.jpg")), 8, 8, "normal");
+			textures[7] = new texture(ImageIO.read(getClass().getResource(imageFolder + "7.jpg")), 8, 8, "normal");
+			textures[8] = new texture(ImageIO.read(getClass().getResource(imageFolder + "8.jpg")), 7, 7, "shadow");
+			textures[9] = new texture(ImageIO.read(getClass().getResource(imageFolder + "9.jpg")), 5, 7, "normal");
+			textures[10] = new texture(ImageIO.read(getClass().getResource(imageFolder + "10.jpg")), 7, 7, "shadow");
+			textures[11] = new texture(ImageIO.read(getClass().getResource(imageFolder + "11.jpg")), 6, 6, "normal");
+			textures[12] = new texture(ImageIO.read(getClass().getResource(imageFolder + "12.jpg")), 8, 6, "normal");
+			textures[13] = new texture(ImageIO.read(getClass().getResource(imageFolder + "13.jpg")), 6, 6, "normal");
+			textures[14] = new texture(ImageIO.read(getClass().getResource(imageFolder + "14.jpg")), 7, 7, "shadow");
+			textures[15] = new texture(ImageIO.read(getClass().getResource(imageFolder + "15.jpg")), 7, 7, "shadow");
+			textures[16] = new texture(ImageIO.read(getClass().getResource(imageFolder + "16.jpg")), 1, 1, "normal");
+			textures[17] = new texture(ImageIO.read(getClass().getResource(imageFolder + "17.jpg")), 8, 8, "explosion");
+			textures[18] = new texture(ImageIO.read(getClass().getResource(imageFolder + "18.jpg")), 8, 8, "explosion");
+			textures[19] = new texture(ImageIO.read(getClass().getResource(imageFolder + "19.jpg")), 8, 8, "explosion");
+			textures[20] = new texture(ImageIO.read(getClass().getResource(imageFolder + "20.jpg")), 8, 8, "explosion");
+			textures[21] = new texture(ImageIO.read(getClass().getResource(imageFolder + "2.jpg")), 8, 8, "light");
+			textures[22] = new texture(ImageIO.read(getClass().getResource(imageFolder + "21.jpg")), 6, 6, "normal");
+			textures[23] = new texture(ImageIO.read(getClass().getResource(imageFolder + "22.jpg")), 6, 6, "normal");
+			textures[24] = new texture(ImageIO.read(getClass().getResource(imageFolder + "23.jpg")), 6, 6, "normal");
+			textures[25] = new texture(ImageIO.read(getClass().getResource(imageFolder + "24.jpg")), 1, 1, "normal");
+			textures[26] = new texture(ImageIO.read(getClass().getResource(imageFolder + "25.jpg")), 1, 1, "normal");
+			textures[27] = new texture(ImageIO.read(getClass().getResource(imageFolder + "26.jpg")), 6, 6, "normal");
+			textures[28] = new texture(ImageIO.read(getClass().getResource(imageFolder + "27.jpg")), 6, 6, "normal");
+			textures[29] = new texture(ImageIO.read(getClass().getResource(imageFolder + "28.jpg")), 6, 6, "normal");
+			textures[30] = new texture(ImageIO.read(getClass().getResource(imageFolder + "29.jpg")), 6, 6, "normal");
+			textures[31] = new texture(ImageIO.read(getClass().getResource(imageFolder + "30.jpg")), 6, 6, "normal");
+			textures[32] = new texture(ImageIO.read(getClass().getResource(imageFolder + "31.jpg")), 1, 1, "normal");
+			textures[33] = new texture(ImageIO.read(getClass().getResource(imageFolder + "32.jpg")), 6, 6, "normal");
+			textures[34] = new texture(ImageIO.read(getClass().getResource(imageFolder + "33.jpg")), 1, 1, "normal");
+			textures[35] = new texture(ImageIO.read(getClass().getResource(imageFolder + "34.jpg")), 6, 6, "normal");
+			textures[36] = new texture(ImageIO.read(getClass().getResource(imageFolder + "35.jpg")), 7, 7, "shadow");
+			textures[37] = new texture(ImageIO.read(getClass().getResource(imageFolder + "36.jpg")), 7, 7, "shadow");
+			textures[38] = new texture(ImageIO.read(getClass().getResource(imageFolder + "37.jpg")), 6, 6, "normal");
+			textures[39] = new texture(ImageIO.read(getClass().getResource(imageFolder + "38.jpg")), 1, 1, "normal");
+			textures[40] = new texture(ImageIO.read(getClass().getResource(imageFolder + "40.jpg")), 8, 8, "normal");
+			textures[41] = new texture(ImageIO.read(getClass().getResource(imageFolder + "41.jpg")), 7, 7, "normal");
+			textures[42] = new texture(ImageIO.read(getClass().getResource(imageFolder + "42.jpg")), 7, 7, "shadow");
+			textures[43] = new texture(ImageIO.read(getClass().getResource(imageFolder + "43.jpg")), 7, 7, "shadow");
+			textures[44] = new texture(ImageIO.read(getClass().getResource(imageFolder + "44.jpg")), 7, 7, "shadow");
+			textures[45] = new texture(ImageIO.read(getClass().getResource(imageFolder + "45.jpg")), 5, 5, "shadow");
+			textures[46] = new texture(ImageIO.read(getClass().getResource(imageFolder + "46.jpg")), 5, 5, "shadow");
+			textures[47] = new texture(ImageIO.read(getClass().getResource(imageFolder + "47.jpg")), 7, 7, "shadow");
+			textures[48] = new texture(ImageIO.read(getClass().getResource(imageFolder + "48.jpg")), 6, 6, "normal");
+			textures[49] = new texture(ImageIO.read(getClass().getResource(imageFolder + "49.jpg")), 1, 1, "normal");
+			textures[50] = new texture(ImageIO.read(getClass().getResource(imageFolder + "50.jpg")), 7, 7, "shadow");
+			textures[51] = new texture(ImageIO.read(getClass().getResource(imageFolder + "51.jpg")), 6, 6, "normal");
+			textures[52] = new texture(ImageIO.read(getClass().getResource(imageFolder + "52.jpg")), 1, 1, "normal");
+			textures[53] = new texture(ImageIO.read(getClass().getResource(imageFolder + "53.jpg")), 7, 7, "normal");
+			textures[54] = new texture(ImageIO.read(getClass().getResource(imageFolder + "54.jpg")), 5, 5, "normal");
+			textures[55] = new texture(ImageIO.read(getClass().getResource(imageFolder + "55.jpg")), 5, 5, "normal");
+			textures[56] = new texture(ImageIO.read(getClass().getResource(imageFolder + "56.jpg")), 7, 7, "shadow");
+			textures[57] = new texture(ImageIO.read(getClass().getResource(imageFolder + "57.jpg")), 6, 6, "smoke");
+			textures[58] = new texture(ImageIO.read(getClass().getResource(imageFolder + "58.jpg")), 6, 6, "normal");
+			textures[59] = new texture(ImageIO.read(getClass().getResource(imageFolder + "59.jpg")), 6, 6, "normal");
+			textures[60] = new texture(ImageIO.read(getClass().getResource(imageFolder + "60.jpg")), 6, 6, "normal");
+			textures[61] = new texture(ImageIO.read(getClass().getResource(imageFolder + "61.jpg")), 7, 7, "shadow");
+			textures[62] = new texture(ImageIO.read(getClass().getResource(imageFolder + "62.jpg")), 8, 8, "normal");
 
 		}catch(Exception e) {e.printStackTrace();}
 
 
 		//Create look up tables
-		GameData.makeData();
+		gameData.makeData();
 		
 		//init text factory
-		TextFactory.init();
+		textFactory.init();
 		
 		//init game hud
-		GameHUD.init();
+		gameHUD.init();
 		
 		//init camera
-		Camera = new Camera();
+		Camera = new camera();
 	
 		//init terrain
-		ObstacleMap.init();
-		PowerUps.init();
-		Terrain = new Terrain();
+		obstacleMap.init();
+		powerUps.init();
+		Terrain = new terrain();
 		
 		//init projectiles, powerups
-		Projectiles.init();
+		projectiles.init();
 		
 		//init player tank
-		PT = new PlayerTank(1000,-0.975,2.5);
+		PT = new playerTank(1000,-0.975,2.5);	
 		
 		//init enemies
-		Enemies.init();
+		enemies.init();
 		
 		
 
@@ -248,20 +249,20 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 		lastTime = temp;
 		
 		//handle input
-		InputHandler.handleInput();
+		inputHandler.handleInput();
 		
 
 		Camera.update();
 		
 		//update game components,process game logic, move things around etc...
-		ModelDrawList.makeList();
+		modelDrawList.makeList();
 		
 		Terrain.update();
 		PT.update();
-		Enemies.update();
-		Projectiles.update();
-		PowerUps.update();
-		GameEventHandler.processEvent();
+		enemies.update();
+		projectiles.update();
+		powerUps.update();
+		gameEventHandler.processEvent();
 	
 		//draw terrain
 		if(terrainBufferFlag == true)
@@ -271,13 +272,13 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 		Terrain.draw();
 		
 		//draw game components
-		ModelDrawList.sort();
-		ModelDrawList.draw();
+		modelDrawList.sort();
+		modelDrawList.draw();
 		
 	
-		GameHUD.update();
+		gameHUD.update();
 		//draw game HUD
-		GameHUD.draw();
+		gameHUD.draw();
 		
 	
 		//copy the screen buffer to video memory
@@ -304,45 +305,45 @@ public class Main extends JFrame implements KeyListener, ActionListener, MouseMo
 	
 	//read keyboard inputs
 	public final void keyPressed(KeyEvent e){
-		InputHandler.keyPressed(e);
+		inputHandler.keyPressed(e);
 	}
 	
 	public final void keyReleased(KeyEvent e){
-		InputHandler.keyReleased(e);
+		inputHandler.keyReleased(e);
 		
 	}
 	
 	//read mouse input
 	public final void mouseMoved(MouseEvent e){
-		InputHandler.mouseMoved(e);
+		inputHandler.mouseMoved(e);
 	}
 	
 	 public final void mouseDragged(MouseEvent e){
-		 InputHandler.mouseDragged(e);
+		 inputHandler.mouseDragged(e);
 	 }
 	
 	
 	
 	 public final void mousePressed(MouseEvent e){
-		 InputHandler.mousePressed(e);
+		 inputHandler.mousePressed(e);
 		
 		 
 	 }
 	 public final void mouseReleased(MouseEvent e){
-		 InputHandler.mouseReleased(e);
+		 inputHandler.mouseReleased(e);
 			
 	 }
 	
 	 public final void mouseEntered(MouseEvent e){
-		 InputHandler.mouseEntered(e);
+		 inputHandler.mouseEntered(e);
 	 }
 	 public final void mouseExited(MouseEvent e){
-		 InputHandler.mouseExited(e);
+		 inputHandler.mouseExited(e);
 	 }
 	 
 	 public final void keyTyped(KeyEvent e){
 		
-		 InputHandler.keyTyped(e);
+		 inputHandler.keyTyped(e);
 	 }
    
 	

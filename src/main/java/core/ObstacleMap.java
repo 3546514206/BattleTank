@@ -3,13 +3,13 @@ package core;
 //Store both static (trees, rocks) and non-static objects(tanks)
 //Non-static object could only occupy 1 tile at a time.
 
-public class ObstacleMap {
+public class obstacleMap {
 	//Type 1 obstacle map store the object that are impassable for
 	//player tank, enemy tanks, but projectiles could still pass through
-	public static Model[] obstacleMap1;
+	public static model[] obstacleMap1;
 	
 	//Type 2 obstacle map store the object that could stop  projectiles.
-	public static Model[] obstacleMap2;
+	public static model[] obstacleMap2;
 	
 	//the position indexes of the surrounding 9 , 25, 49 tiles 
 	public static int[] indexes, indexes2, indexes3;
@@ -17,9 +17,9 @@ public class ObstacleMap {
 	//Initialize obstacleMaps.
 	//The entire terrain is divided into 80 * 130 tiles
 	public static void init(){
-		obstacleMap1 = new Model[80*130];
+		obstacleMap1 = new model[80*130];
 		
-		obstacleMap2 = new Model[80*130];
+		obstacleMap2 = new model[80*130];
 		
 		indexes = new int[9];
 		indexes2 = new int[25];
@@ -34,13 +34,13 @@ public class ObstacleMap {
 	}
 	
 	//regeister a type 1 obstacle ;
-	public static void registerObstacle1(Model obstacle, int position){
+	public static void registerObstacle1(model obstacle,  int position){
 		if(obstacleMap1[position] == null)
 			obstacleMap1[position] = obstacle;
 	}
 	
 	//regeister a type 2 obstacle ;
-	public static void registerObstacle2(Model obstacle, int position){
+	public static void registerObstacle2(model obstacle,  int position){
 		if(position < 0 || position >= 10400)
 			return;
 		if(obstacleMap2[position] == null)
@@ -66,7 +66,7 @@ public class ObstacleMap {
 	}
 	
 	//collision detection: 3D model against type 1 obstacles
-	public static boolean collideWithObstacle1(Model testObject, int position){
+	public static boolean collideWithObstacle1(model testObject, int position){
 		//find out the 9  position index around the test object
 		indexes[0] = position -81;
 		indexes[1] = position -80;
@@ -84,7 +84,7 @@ public class ObstacleMap {
 				continue;
 			if(obstacleMap1[indexes[i]] == null)
 				continue;
-			if(Rectangle2D.testIntersection(obstacleMap1[indexes[i]].getBoundary2D(), testObject.getBoundary2D())){
+			if(rectangle2D.testIntersection(obstacleMap1[indexes[i]].getBoundary2D(), testObject.getBoundary2D())){
 				return true;
 			}
 		}
@@ -93,7 +93,7 @@ public class ObstacleMap {
 	}
 	
 	//collision detection: 3D model against type 2 obstacles
-	public static boolean collideWithObstacle2(Model testObject, int position){
+	public static boolean collideWithObstacle2(model testObject, int position){
 		//find out  position indexes around the test object
 		
 		/*for(int i = 0; i < 7; i++){
@@ -111,7 +111,7 @@ public class ObstacleMap {
 				continue;
 			if(obstacleMap2[temp] == null || obstacleMap2[temp] == testObject)
 				continue;
-			if(Rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), testObject.getBoundary2D())){
+			if(rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), testObject.getBoundary2D())){
 				return true;
 			}
 		}
@@ -120,7 +120,7 @@ public class ObstacleMap {
 	}
 	
 	//collision detection: projectile and surrounding type 2 obstacles
-	public static boolean projectileCollideObstacle2(Model projectile, int position, boolean hostile){
+	public static boolean projectileCollideObstacle2(model projectile, int position, boolean hostile){
 		//find out  position indexes around the test object
 		
 		indexes2[0] = position -162; indexes2[1] = position -161; indexes2[2] = position -160; indexes2[3] = position -159; indexes2[4] = position - 158;
@@ -143,7 +143,7 @@ public class ObstacleMap {
 					continue;
 				if(obstacleMap2[temp] == null)
 					continue;
-				if(Rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
+				if(rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
 					if(obstacleMap2[temp].getType() != 2)
 						return true;
 					else
@@ -157,7 +157,7 @@ public class ObstacleMap {
 					continue;
 				if(obstacleMap2[temp] == null || obstacleMap2[temp].getType() == 1)
 					continue;
-				if(Rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
+				if(rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
 					return true;
 				}
 			}
@@ -169,7 +169,7 @@ public class ObstacleMap {
 	}
 	
 	//collision detection: railgun slug against surrounding type 2 obstacles
-	public static boolean slugCollideObstacle2(Model projectile, int position, boolean hostile){
+	public static boolean slugCollideObstacle2(model projectile, int position, boolean hostile){
 		//find out  position indexes around the test object
 		
 		indexes2[0] = position -162; indexes2[1] = position -161; indexes2[2] = position -160; indexes2[3] = position -159; indexes2[4] = position - 158;
@@ -194,9 +194,9 @@ public class ObstacleMap {
 					continue;
 				if(obstacleMap2[temp] == null)
 					continue;
-				Rectangle2D tempRect = obstacleMap2[temp].getBoundary2D();
+				rectangle2D tempRect = obstacleMap2[temp].getBoundary2D();
 				if(obstacleMap2[temp].getType() == 1){
-					tempRect = new Rectangle2D(obstacleMap2[temp].getBoundary2D().xPos - 0.01,
+					tempRect = new rectangle2D(obstacleMap2[temp].getBoundary2D().xPos - 0.01, 
 											   obstacleMap2[temp].getBoundary2D().yPos + 0.01,											
 											   0.16,
 											   0.16
@@ -204,21 +204,21 @@ public class ObstacleMap {
 				}
 				
 				
-				if(Rectangle2D.testIntersection(tempRect, projectile.getBoundary2D())){
+				if(rectangle2D.testIntersection(tempRect, projectile.getBoundary2D())){
 					if(obstacleMap2[temp].getType() == 3 || obstacleMap2[temp].getType() == 6){
-						Explosion theExplosion = new Explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5);
+						explosion theExplosion = new explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5); 
 						theExplosion.damage = 0;
 						theExplosion.type = 2;
-						Projectiles.register(theExplosion);
+						projectiles.register(theExplosion);
 						obstacleMap2[temp].damage(100);
 						
 						return true;
 					}
 					if(obstacleMap2[temp].getType() == 1){
-						Explosion theExplosion = new Explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5);
+						explosion theExplosion = new explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5); 
 						theExplosion.damage = 0;
 						theExplosion.type = 2;
-						Projectiles.register(theExplosion);
+						projectiles.register(theExplosion);
 						obstacleMap2[temp].damage(10);
 					
 					}
@@ -231,12 +231,12 @@ public class ObstacleMap {
 					continue;
 				if(obstacleMap2[temp] == null || obstacleMap2[temp].getType() == 1)
 					continue;
-				if(Rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
+				if(rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), projectile.getBoundary2D())){
 					if(obstacleMap2[temp].getType() == 3 || obstacleMap2[temp].getType() == 6){
-						Explosion theExplosion = new Explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5);
+						explosion theExplosion = new explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5); 
 						theExplosion.damage = 0;
 						theExplosion.type = 2;
-						Projectiles.register(theExplosion);
+						projectiles.register(theExplosion);
 						obstacleMap2[temp].damage(100);
 						
 						
@@ -244,10 +244,10 @@ public class ObstacleMap {
 					}
 					if(obstacleMap2[temp].getType() == 2){
 						obstacleMap2[temp].damage(8);
-						Explosion theExplosion = new Explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5);
+						explosion theExplosion = new explosion(projectile.getRealCentre().x, -0.9, projectile.getRealCentre().z, 0.5); 
 						theExplosion.damage = 0;
 						theExplosion.type = 2;
-						Projectiles.register(theExplosion);
+						projectiles.register(theExplosion);
 					}
 				}
 			}
@@ -267,7 +267,7 @@ public class ObstacleMap {
 	}
 	
 	//test if a tile is occupied by a static type 2 obstacles)
-	public static Model isOccupied2(Vector position){
+	public static model isOccupied2(vector position){
 		int index = (int)(position.x*4) + (129-(int)(position.z*4))*80;
 		if(index < 0 || index >= 10400){
 			return null;
@@ -280,7 +280,7 @@ public class ObstacleMap {
 	}
 	
 	//test if there any enemy units around a location
-	public static Vector isOccupied3(Vector position){
+	public static vector isOccupied3(vector position){
 		int index = (int)(position.x*4) + (129-(int)(position.z*4))*80;
 		//find out the 9  position index around the test object
 		indexes[0] = index -81;
@@ -310,7 +310,7 @@ public class ObstacleMap {
 
 	
 	//damage type2 obstacles
-	public static void damageType2Obstacles(int damage, Rectangle2D blastArea, int groundZero){
+	public static void damageType2Obstacles(int damage, rectangle2D blastArea, int groundZero){
 		indexes2[0] = groundZero -162; indexes2[1] = groundZero -161; indexes2[2] = groundZero -160; indexes2[3] = groundZero -159; indexes2[4] = groundZero - 158;
 		
 		indexes2[5] = groundZero -82; indexes2[6] = groundZero -81; indexes2[7] = groundZero -80; indexes2[8] = groundZero -79; indexes2[9] = groundZero -78;
@@ -327,7 +327,7 @@ public class ObstacleMap {
 				continue;
 			if(obstacleMap2[temp] == null)
 				continue;
-			if(Rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), blastArea)){
+			if(rectangle2D.testIntersection(obstacleMap2[temp].getBoundary2D(), blastArea)){
 				obstacleMap2[temp].damage(damage);
 			}else{
 				obstacleMap2[temp].damage(0);
@@ -336,7 +336,7 @@ public class ObstacleMap {
 	}
 	
 	//tell surrounding enemy tanks to move away
-	public static void giveWay(Model tank, int index){
+	public static void giveWay(model tank, int index){
 		indexes[1] = index -81;
 		indexes[2] = index -80;
 		indexes[3] = index -79;

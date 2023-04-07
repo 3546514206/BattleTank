@@ -1,17 +1,17 @@
 package core;
 //a list of 3D models which will be sent to the drawing pipeline during a game loop
-public class ModelDrawList {
-	public static Model[] visibleModels;
+public class modelDrawList {
+	public static model[] visibleModels;
 	public static int modelCount;
 	
 	//create a list
 	public static void makeList(){
-		visibleModels = new Model[300];
+		visibleModels = new model[300];
 		modelCount = 0;
 	}
 	
 	//insert a model into the list
-	public static void register(Model m){
+	public static void register(model m){
 		for(int i = 0; i < visibleModels.length; i ++){
 			if(visibleModels[i] == null){
 				visibleModels[i] = m;
@@ -36,8 +36,8 @@ public class ModelDrawList {
 		//bubble sort
 		for(int i = 1; i < modelCount; i++){
 			for(int j = 0; j < modelCount - i; j++){
-				if(Geometry.compareModels(visibleModels[j+1],visibleModels[j])){
-					Model temp = visibleModels[j+1];
+				if(geometry.compareModels(visibleModels[j+1],visibleModels[j])){
+					model temp = visibleModels[j+1];
 					visibleModels[j+1] = visibleModels[j];
 					visibleModels[j] = temp;
 				}

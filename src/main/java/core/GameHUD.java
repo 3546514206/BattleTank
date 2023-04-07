@@ -1,6 +1,6 @@
 package core;
 //this class produce text images
-public class GameHUD {
+public class gameHUD {
 	
 	//background window frame
 	public static int[] leftSide;
@@ -35,7 +35,7 @@ public class GameHUD {
 		
 		
 		for(int i = 0; i < 640; i+=2){
-			int random = GameData.getRandom()/10;
+			int random = gameData.getRandom()/10;
 			randomDisplacement[i] = random;
 			randomDisplacement[i+1] = random;
 			
@@ -116,22 +116,22 @@ public class GameHUD {
 	//a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  @  .
 	
 	public static void draw(){
-		if(Main.gameOver){
+		if(main.gameOver){
 			//draw game over message
 			drawGameoverMessage();
 		}
 		
-		if(Main.win){
+		if(main.win){
 			//draw wining message
 			drawWinMessage();
 		}
 		
-		if(Main.gamePaused == false && !Main.gameNotStart)
+		if(main.gamePaused == false && !main.gameNotStart)
 			drawInfo();
 		
-		if(Main.gamePaused == true || (Main.gameNotStart && menuOptionStatus != 0)){
+		if(main.gamePaused == true || (main.gameNotStart && menuOptionStatus != 0)){
 			drawMenu();
-			Main.copyScreen();
+			main.copyScreen();
 		}
 		
 		
@@ -148,7 +148,7 @@ public class GameHUD {
 					if(currentPosition >= 640 * 480){
 						currentPosition = 640*479 + i;
 					}
-					Main.screen[currentPosition] = Main.stencilBuffer2[j*640 + i];
+					main.screen[currentPosition] = main.stencilBuffer2[j*640 + i];
 				}
 			}
 			
@@ -163,10 +163,10 @@ public class GameHUD {
 	public static void update(){
 		if(escapePressed){
 			if(menuOptionStatus == 0){
-				Main.gamePaused = true;
+				main.gamePaused = true;
 				menuOptionStatus = 1;
 			}else if(menuOptionStatus == 1 || menuOptionStatus == 2 || menuOptionStatus == 3){
-				Main.gamePaused = false;
+				main.gamePaused = false;
 				menuOptionStatus = 0;
 			}else if(menuOptionStatus == 4 || menuOptionStatus == 5){
 				menuOptionStatus = 1;
@@ -200,21 +200,21 @@ public class GameHUD {
 				gameoverMessagePosition = 0;
 				winMessagePosition = 0;
 				loadingScreenPosition = 0;
-				ObstacleMap.clear();
+				obstacleMap.clear();
 				
-				Camera.viewDirection = new Vector(0,0,1);
-				Camera.XZ_angle = 0;
-				Camera.restart = true;
+				camera.viewDirection = new vector(0,0,1);
+				camera.XZ_angle = 0;
+				camera.restart = true;
 				
-				PowerUps.init();
-				Projectiles.init();
-				Enemies.init();
-				ObstacleMap.removeObstacle2(Main.PT.position);
-				Main.PT = new PlayerTank(10,-0.975,2.5);
-				Main.gameNotStart = false;
-				Main.gamePaused = false;
-				Main.gameOver = false;
-				Main.win = false;
+				powerUps.init();
+				projectiles.init();
+				enemies.init();
+				obstacleMap.removeObstacle2(main.PT.position);
+				main.PT = new playerTank(10,-0.975,2.5);	
+				main.gameNotStart = false;
+				main.gamePaused = false;
+				main.gameOver = false;
+				main.win = false;
 				
 			}else if(menuOptionStatus == 2){
 				menuOptionStatus = 4;
@@ -235,26 +235,26 @@ public class GameHUD {
 			}
 			
 				
-			if(mouseXpos > 264 && mouseXpos < 385 && mouseYpos > 120 && mouseYpos < 144 && !(!Main.gamePaused && !Main.gameNotStart)){
+			if(mouseXpos > 264 && mouseXpos < 385 && mouseYpos > 120 && mouseYpos < 144 && !(!main.gamePaused && !main.gameNotStart)){
 				menuOptionStatus = 0;
 				gameoverMessagePosition = 0;
 				winMessagePosition = 0;
 				loadingScreenPosition = 0;
-				ObstacleMap.clear();
+				obstacleMap.clear();
 				
-				Camera.viewDirection = new Vector(0,0,1);
-				Camera.XZ_angle = 0;
-				Camera.restart = true;
+				camera.viewDirection = new vector(0,0,1);
+				camera.XZ_angle = 0;
+				camera.restart = true;
 				
-				PowerUps.init();
-				Projectiles.init();
-				Enemies.init();
-				ObstacleMap.removeObstacle2(Main.PT.position);
-				Main.PT = new PlayerTank(10,-0.975,2.5);
-				Main.gameNotStart = false;
-				Main.gamePaused = false;
-				Main.gameOver = false;
-				Main.win = false;
+				powerUps.init();
+				projectiles.init();
+				enemies.init();
+				obstacleMap.removeObstacle2(main.PT.position);
+				main.PT = new playerTank(10,-0.975,2.5);	
+				main.gameNotStart = false;
+				main.gamePaused = false;
+				main.gameOver = false;
+				main.win = false;
 			}
 			
 			if(mouseXpos > 262 && mouseXpos < 385 && mouseYpos > 161 && mouseYpos < 183)
@@ -290,8 +290,8 @@ public class GameHUD {
 		
 		if(gameoverMessagePosition > 310){
 		
-			TextFactory.draw(game, gameoverMessagePosition -310, 190, 2, 0x00eec64d);
-			TextFactory.draw(over, 527 - gameoverMessagePosition + 310, 190, 2, 0x00eec64d);
+			textFactory.draw(game, gameoverMessagePosition -310, 190, 2, 0x00eec64d);
+			textFactory.draw(over, 527 - gameoverMessagePosition + 310, 190, 2, 0x00eec64d);
 		}
 	}
 	
@@ -299,20 +299,20 @@ public class GameHUD {
 		if(winMessagePosition < 500)
 			winMessagePosition+=6;
 		else{
-			TextFactory.draw(cheat1, 80, 220, 1, 0x005d07f7);
-			TextFactory.draw(cheat2, 80, 240, 1, 0x005d07f7);
-			TextFactory.draw(cheat3, 80, 260, 1, 0x005d07f7);
+			textFactory.draw(cheat1, 80, 220, 1, 0x005d07f7);
+			textFactory.draw(cheat2, 80, 240, 1, 0x005d07f7);
+			textFactory.draw(cheat3, 80, 260, 1, 0x005d07f7);
 		}
 		
 		if(winMessagePosition > 310){
-			TextFactory.draw(You, winMessagePosition -310, 170, 2, 0x00ed07b7);
-			TextFactory.draw(Won, 527 - winMessagePosition + 310, 170, 2, 0x00ed07b7);
+			textFactory.draw(You, winMessagePosition -310, 170, 2, 0x00ed07b7);
+			textFactory.draw(Won, 527 - winMessagePosition + 310, 170, 2, 0x00ed07b7);
 		}
 		
 	}
 	
 	public static void drawMenu(){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		int yPos = 50;
 		int index = 0;
 		int pixel;
@@ -360,7 +360,7 @@ public class GameHUD {
 		}
 		
 		int color  = 0x00d0d0d0;
-		TextFactory.draw(BattleTank2, 222, 57, 1, color);
+		textFactory.draw(BattleTank2, 222, 57, 1, color);
 		
 		if(menuOptionStatus > 0 && menuOptionStatus <=3){
 			
@@ -368,46 +368,46 @@ public class GameHUD {
 				color =  0x0055ffaa;
 			else
 				color  = 0x00d0d0d0;
-			TextFactory.draw(NewGame, 265, 120, 1, color);
+			textFactory.draw(NewGame, 265, 120, 1, color);
 			
 			if(menuOptionStatus == 2)
 				color =  0x0055ffaa;
 			else
 				color  = 0x00d0d0d0;
-			TextFactory.draw(Controls, 265, 160, 1, color);
+			textFactory.draw(Controls, 265, 160, 1, color);
 			
 			if(menuOptionStatus == 3)
 				color =  0x0055ffaa;
 			else
 				color  = 0x00d0d0d0;
-			TextFactory.draw(AboutAuthor, 235, 200, 1, color);
+			textFactory.draw(AboutAuthor, 235, 200, 1, color);	
 		}
 		
 		if(menuOptionStatus == 4){
 			color =  0x0055ffaa;
-			TextFactory.draw(controlDescription1, 183, 100, 1, color);
-			TextFactory.draw(controlDescription2, 183, 122, 1, color);
-			TextFactory.draw(controlDescription3, 183, 160, 1, color);
-			TextFactory.draw(controlDescription4, 183, 177, 1, color);
-			TextFactory.draw(controlDescription5, 183, 199, 1, color);
-			TextFactory.draw(controlDescription6, 183, 237, 1, color);
-			TextFactory.draw(controlDescription7, 183, 259, 1, color);
-			TextFactory.draw(controlDescription8, 183, 297, 1, color);
-			TextFactory.draw(controlDescription9, 183, 319, 1, color);
+			textFactory.draw(controlDescription1, 183, 100, 1, color);	
+			textFactory.draw(controlDescription2, 183, 122, 1, color);	
+			textFactory.draw(controlDescription3, 183, 160, 1, color);
+			textFactory.draw(controlDescription4, 183, 177, 1, color);
+			textFactory.draw(controlDescription5, 183, 199, 1, color);	
+			textFactory.draw(controlDescription6, 183, 237, 1, color);
+			textFactory.draw(controlDescription7, 183, 259, 1, color);
+			textFactory.draw(controlDescription8, 183, 297, 1, color);
+			textFactory.draw(controlDescription9, 183, 319, 1, color);
 		}
 		
 		if(menuOptionStatus == 5){
 			color =  0x0055ffaa;
-			TextFactory.draw(author1, 183, 100, 1, color);
-			TextFactory.draw(author2, 183, 122, 1, color);
-			TextFactory.draw(author3, 183, 144, 1, color);
-			TextFactory.draw(author4, 183, 166, 1, color);
-			TextFactory.draw(author5, 183, 188, 1, color);
-			TextFactory.draw(author6, 183, 210, 1, color);
-			TextFactory.draw(author7, 183, 232, 1, color);
-			TextFactory.draw(author8, 183, 254, 1, color);
-			TextFactory.draw(author9, 183, 276, 1, color);
-			TextFactory.draw(author10, 183, 320, 1, color);
+			textFactory.draw(author1, 183, 100, 1, color);	
+			textFactory.draw(author2, 183, 122, 1, color);	
+			textFactory.draw(author3, 183, 144, 1, color);	
+			textFactory.draw(author4, 183, 166, 1, color);	
+			textFactory.draw(author5, 183, 188, 1, color);	
+			textFactory.draw(author6, 183, 210, 1, color);	
+			textFactory.draw(author7, 183, 232, 1, color);	
+			textFactory.draw(author8, 183, 254, 1, color);	
+			textFactory.draw(author9, 183, 276, 1, color);
+			textFactory.draw(author10, 183, 320, 1, color);	
 			
 		}
 		
@@ -415,7 +415,7 @@ public class GameHUD {
 	}
 	
 	public static void drawInfo(){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		int yPos = 420;
 		int index = 0;
 		int pixel;
@@ -462,9 +462,9 @@ public class GameHUD {
 			yPos++;
 		}
 		
-		Integer integer = new Integer((int)((double) Main.PT.HP *100/150));
-		TextFactory.drawString(integer.toString(), 134, 427, 1, 0x00d0d0d0);
-		TextFactory.draw(Health, 32, 427, 1, 0x00d0d0d0);
+		Integer integer = new Integer((int)((double)main.PT.HP *100/150));
+		textFactory.drawString(integer.toString(), 134, 427, 1, 0x00d0d0d0);
+		textFactory.draw(Health, 32, 427, 1, 0x00d0d0d0);
 		
 		//draw ammo info
 		yPos = 420;
@@ -509,9 +509,9 @@ public class GameHUD {
 		}
 		
 		
-		integer = new Integer(Main.PT.currentAmmo);
-		TextFactory.drawString(integer.toString(), 554, 427, 1, 0x00d0d0d0);
-		TextFactory.draw(Ammo, 482, 427, 1, 0x00d0d0d0);
+		integer = new Integer(main.PT.currentAmmo);
+		textFactory.drawString(integer.toString(), 554, 427, 1, 0x00d0d0d0);
+		textFactory.draw(Ammo, 482, 427, 1, 0x00d0d0d0);
 		
 		
 	}

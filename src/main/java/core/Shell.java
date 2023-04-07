@@ -1,11 +1,11 @@
 package core;
 
-public class Shell extends SolidObject {
+public class shell extends solidObject{
 	//the polygons of the model
-	private Polygon3D[] polygons;
+	private polygon3D[] polygons; 
 	
 	//the moving direction of the tank shell
-	private Vector direction;
+	private vector direction;
 	
 	//hostile shells are fired by enemy tanks and will not collide other enemy tanks,
 	private boolean isHostile;
@@ -13,13 +13,13 @@ public class Shell extends SolidObject {
 	//type of the shell, 0 = bullet, 1 = plassma ball
 	private int type; 
 	
-	public Shell(double x, double y, double z, int angle, boolean isHostile, int type){
-		start = new Vector(x,y,z);
+	public shell(double x, double y, double z, int angle, boolean isHostile, int type){
+		start = new vector(x,y,z);
 		this.type = type;
 		
-		iDirection = new Vector(0.8,0,0);
-		jDirection = new Vector(0,0.8,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(0.8,0,0);
+		jDirection = new vector(0,0.8,0);
+		kDirection = new vector(0,0,1);
 		//kDirection.scale(0.85);
 		
 		this.isHostile = isHostile;
@@ -29,14 +29,14 @@ public class Shell extends SolidObject {
 		makeBoundary(0.01, 0.025, 0.01);
 		
 		//create 2D boundary
-		boundary2D = new Rectangle2D(x - 0.005, z + 0.005, 0.01, 0.01);
+		boundary2D = new rectangle2D(x - 0.005, z + 0.005, 0.01, 0.01);
 		
 		//adjust orientation of the model
 		iDirection.rotate_XZ(angle);
 		kDirection.rotate_XZ(angle);
 		
 		//find the move direction, it will never change during the shell's lifespan, shell moves at 0.13 unit per frame
-		direction = new Vector(0,0,0.13);
+		direction = new vector(0,0,0.13);
 		lifeSpan = 14;
 
 		direction.rotate_XZ(angle);
@@ -50,33 +50,33 @@ public class Shell extends SolidObject {
 	//Construct polygons for this model.
 	//The polygon data is hard-coded here
 	public void makePolygons(){
-		Vector[] v;
+		vector[] v;
 		int diffuse;
-		Texture t;
-		polygons = new Polygon3D[16];
+		texture t;
+		polygons = new polygon3D[16]; 
 		
 		if(type == 1){
-			t = Main.textures[52];
+			t = main.textures[52];
 			diffuse = 50;
 			kDirection.scale(1.3);
 			
 		}else{
-			t = Main.textures[16];
+			t = main.textures[16];
 			diffuse = 60;
 		}
 		
-		v = new Vector[]{put(-0.002, 0.05, 0.02), put(0.002, 0.05, 0.02), put(0.005, 0.05, -0.02), put(-0.005, 0.05, -0.02)};
-		polygons[0] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.002, 0.05, 0.02), put(0.002, 0.05, 0.02), put(0.005, 0.05, -0.02), put(-0.005, 0.05, -0.02)};
+		polygons[0] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(-0.002, 0.05, 0.02), put(-0.005, 0.05, -0.02), put(-0.005, 0.04, -0.02), put(-0.002, 0.04, 0.02)};
-		polygons[1] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.002, 0.05, 0.02), put(-0.005, 0.05, -0.02), put(-0.005, 0.04, -0.02), put(-0.002, 0.04, 0.02)};
+		polygons[1] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(0.002, 0.04, 0.02), put(0.005, 0.04, -0.02), put(0.005, 0.05, -0.02),  put(0.001, 0.05, 0.02)};
-		polygons[2] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(0.002, 0.04, 0.02), put(0.005, 0.04, -0.02), put(0.005, 0.05, -0.02),  put(0.001, 0.05, 0.02)};
+		polygons[2] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		
-		v = new Vector[]{put(-0.002, 0.04, 0.02), put(0.002, 0.04, 0.02), put(0.002, 0.05, 0.02), put(-0.002, 0.05, 0.02)};
-		polygons[3] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.002, 0.04, 0.02), put(0.002, 0.04, 0.02), put(0.002, 0.05, 0.02), put(-0.002, 0.05, 0.02)};
+		polygons[3] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		for(int i = 0; i < 4; i++){
 			
@@ -92,20 +92,20 @@ public class Shell extends SolidObject {
 		iDirection.scale(0.85);
 		jDirection.scale(0.85);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
-		polygons[4] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
+		polygons[4] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
-		polygons[5] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
+		polygons[5] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
-		polygons[6] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
+		polygons[6] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		//v = new vector[]{put(-0.005, 0.05, -0.06), put(0.005, 0.05, -0.06), put(0.005, 0.04, -0.06), put(-0.005, 0.04, -0.06)};
 		//polygons[8] = new polygon3D(v, v[0], v[1], v [3],  main.textures[16], 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
-		polygons[7] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
+		polygons[7] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		for(int i = 4; i < 8; i++){
 			polygons[i].alpha =192;
@@ -121,20 +121,20 @@ public class Shell extends SolidObject {
 		iDirection.scale(0.8);
 		jDirection.scale(0.8);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
-		polygons[8] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
+		polygons[8] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
-		polygons[9] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
+		polygons[9] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
-		polygons[10] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
+		polygons[10] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		//v = new vector[]{put(-0.005, 0.05, -0.06), put(0.005, 0.05, -0.06), put(0.005, 0.04, -0.06), put(-0.005, 0.04, -0.06)};
 		//polygons[13] = new polygon3D(v, v[0], v[1], v [3],  main.textures[16], 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
-		polygons[11] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
+		polygons[11] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		for(int i = 8; i < 12; i++){
 			polygons[i].alpha =208;
@@ -148,20 +148,20 @@ public class Shell extends SolidObject {
 		iDirection.scale(0.75);
 		jDirection.scale(0.75);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
-		polygons[12] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(0.005, 0.05, 0.06), put(0.005, 0.05, -0.06), put(-0.005, 0.05, -0.06)};
+		polygons[12] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
-		polygons[13] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.05, 0.06), put(-0.005, 0.05, -0.06), put(-0.005, 0.04, -0.06), put(-0.005, 0.04, 0.06)};
+		polygons[13] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
-		v = new Vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
-		polygons[14] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(0.005, 0.04, 0.06), put(0.005, 0.04, -0.06), put(0.005, 0.05, -0.06),  put(0.005, 0.05, 0.06)};
+		polygons[14] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		//v = new vector[]{put(-0.005, 0.05, -0.06), put(0.005, 0.05, -0.06), put(0.005, 0.04, -0.06), put(-0.005, 0.04, -0.06)};
 		//polygons[18] = new polygon3D(v, v[0], v[1], v [3],  main.textures[16], 1,1,6);
 		
-		v = new Vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
-		polygons[15] = new Polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
+		v = new vector[]{put(-0.005, 0.04, 0.06), put(0.005, 0.04, 0.06), put(0.005, 0.05, 0.06), put(-0.005, 0.05, 0.06)};
+		polygons[15] = new polygon3D(v, v[0], v[1], v [3],  t, 1,1,6);
 		
 		for(int i = 12; i < 16; i++){
 			polygons[i].alpha =224;
@@ -170,7 +170,7 @@ public class Shell extends SolidObject {
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	
@@ -189,16 +189,16 @@ public class Shell extends SolidObject {
 		
 		//check whether the shell emembeded into other objects.
 		int position = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
-		if(ObstacleMap.projectileCollideObstacle2(this, position, isHostile)){
+		if(obstacleMap.projectileCollideObstacle2(this, position, isHostile)){
 			lifeSpan = -1;
 			//generate explosion
 			direction.scale(0.5);
 			centre.add(direction);
-			Explosion e = new Explosion(centre.x, centre.y, centre.z, 1);
+			explosion e = new explosion(centre.x, centre.y, centre.z, 1);
 			e.type = this.type;
 			if(type == 1)
 				e.damage = 10;
-			Projectiles.register(e);
+			projectiles.register(e);
 			
 			return;
 		}
@@ -206,7 +206,7 @@ public class Shell extends SolidObject {
 		
 		
 		//send to draw list
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 		
 		//update centre
 		centre.add(direction);
@@ -221,9 +221,9 @@ public class Shell extends SolidObject {
 		//find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		
 	
 		//update polygons to camera coordinate
@@ -243,11 +243,11 @@ public class Shell extends SolidObject {
 		//down to zero, it will explode and cause damage.
 		if(lifeSpan < 0){
 			//generate explosion
-			Explosion e = new Explosion(centre.x, centre.y, centre.z, 1);
+			explosion e = new explosion(centre.x, centre.y, centre.z, 1);
 			e.type = this.type;
 			if(type == 1)
 				e.damage = 10;
-			Projectiles.register(e);
+			projectiles.register(e);
 			
 		}
 	}

@@ -9,7 +9,7 @@ package core;
 //
 //each letter has a dimension of 16 pixel high and 16 pixel wide
 
-public class TextFactory {
+public class textFactory {
 
 	//pixel of all the letters, 
 	public static boolean[][] letters;
@@ -22,7 +22,7 @@ public class TextFactory {
 		letters = new boolean[64][1024];
 		spaceCharacter = new boolean[1024];
 		
-		short[] texture = Main.textures[62].Texture;
+		short[] texture = main.textures[62].Texture;
 		
 		//create font for 0 ~ 9
 		int startIndex= 0;
@@ -143,9 +143,9 @@ public class TextFactory {
 	public static void draw(int[] text, int xPos, int yPos, int size, int color){
 		for(int i = 0; i < text.length; i ++){
 			if(text[i] == -1)
-				Rasterizer.renderText(spaceCharacter, xPos, yPos, size, color);
+				rasterizer.renderText(spaceCharacter, xPos, yPos, size, color);
 			else	
-				Rasterizer.renderText(letters[text[i]], xPos, yPos, size, color);
+				rasterizer.renderText(letters[text[i]], xPos, yPos, size, color);
 			if(size == 1)
 				xPos+=15;
 			if(size == 2)
@@ -164,9 +164,9 @@ public class TextFactory {
 		
 		for(int i = 0; i < length; i ++){
 			if(text_[i] == -1)
-				Rasterizer.renderText(spaceCharacter, xPos, yPos, size, color);
+				rasterizer.renderText(spaceCharacter, xPos, yPos, size, color);
 			else	
-				Rasterizer.renderText(letters[text_[i]], xPos, yPos, size, color);
+				rasterizer.renderText(letters[text_[i]], xPos, yPos, size, color);
 			
 			if(size == 1)
 				xPos+=15;

@@ -1,18 +1,18 @@
 package core;
 import java.awt.*;
 
-public class Camera {
+public class camera {
 	//position of the camera (third person view)
-	public static Vector position;
+	public static vector position;
 	
 	//position of the camera (absolute)
-	public static Vector absolutePosition;
+	public static vector absolutePosition;
 	
 	//the displacement for creating third person effect
-	public Vector thirdPersonDisplacement;
+	public vector thirdPersonDisplacement;
 	
 	//direction of the view
-	public static Vector viewDirection;
+	public static vector viewDirection;
 	
 	//the angle that camera has rotated from the default view direction
 	//the YZ_angle is 315 degrees, and it does not change
@@ -27,13 +27,13 @@ public class Camera {
 	//fly through timer
 	public int flyThroughTimer;
 	
-	public Camera(){
+	public camera(){
 		//init camera with default values
 		XZ_angle = 0;
-		position = new Vector(10,0.25,1.5);
-		absolutePosition = new Vector(10,0.25,1.5);
-		viewDirection = new Vector(0,0,1);
-		thirdPersonDisplacement = new Vector(0,0,0);
+		position = new vector(10,0.25,1.5);
+		absolutePosition = new vector(10,0.25,1.5);
+		viewDirection = new vector(0,0,1); 
+		thirdPersonDisplacement = new vector(0,0,0);
 		thirdPersonDisplacement.set(viewDirection.x, 0, -viewDirection.z);
 	}
 	
@@ -41,18 +41,18 @@ public class Camera {
 	
 	public void update(){
 		//stop updating camera when game is finished
-		if(Main.gameOver){
+		if(main.gameOver){
 			return;
 		}
 		
-		if(Main.gameNotStart){
+		if(main.gameNotStart){
 			flyThroughTimer++;
 		}
 		
 		
 		
 		//move the camera to the player's position
-		if(!Main.gameNotStart){
+		if(!main.gameNotStart){
 			//update position
 			position.subtract(thirdPersonDisplacement);
 			
@@ -61,13 +61,13 @@ public class Camera {
 			flyThroughTimer = 0;
 			
 			if(!restart){
-				double d_x = (PlayerTank.bodyCenter.x - position.x)/5;
-				double d_z = (PlayerTank.bodyCenter.z - position.z)/5;
+				double d_x = (playerTank.bodyCenter.x - position.x)/5;
+				double d_z = (playerTank.bodyCenter.z - position.z)/5;
 				position.x+=d_x;
 				position.z+=d_z;
 			}else{
-				double d_x = (PlayerTank.bodyCenter.x - position.x);
-				double d_z = (PlayerTank.bodyCenter.z - position.z);
+				double d_x = (playerTank.bodyCenter.x - position.x);
+				double d_z = (playerTank.bodyCenter.z - position.z);
 				position.x+=d_x;
 				position.z+=d_z;
 				

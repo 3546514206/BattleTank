@@ -1,13 +1,13 @@
 package core;
-public class Rocket extends SolidObject {
+public class rocket extends solidObject {
 
 	// the polygons of the model
-	private Polygon3D[] polygons;
+	private polygon3D[] polygons;
 
 	// the moving direction of the rocket
 	private int angle;
 
-	private Vector direction;
+	private vector direction;
 
 	// the angle that rocket has turned during a frame
 	private int angleDelta;
@@ -16,25 +16,25 @@ public class Rocket extends SolidObject {
 	// enemy tanks
 	private boolean isHostile;
 
-	private Polygon3D rocketAura;
+	private polygon3D rocketAura;
 
 	// location of the target
-	private Vector targetLocation;
+	private vector targetLocation;
 	
 	
 
 	// temporary vectors which will be used for vector arithmetic
-	private Vector tempVector1 = new Vector(0, 0, 0);
+	private vector tempVector1 = new vector(0, 0, 0);
 
-	private Vector tempVector2 = new Vector(0, 0, 0);
+	private vector tempVector2 = new vector(0, 0, 0);
 
-	public Rocket(double x, double y, double z, int angle, boolean isHostile) {
-		start = new Vector(x, y, z);
+	public rocket(double x, double y, double z, int angle, boolean isHostile) {
+		start = new vector(x, y, z);
 		this.angle = angle;
 
-		iDirection = new Vector(1, 0, 0);
-		jDirection = new Vector(0, 1, 0);
-		kDirection = new Vector(0, 0, 1);
+		iDirection = new vector(1, 0, 0);
+		jDirection = new vector(0, 1, 0);
+		kDirection = new vector(0, 0, 1);
 
 		this.isHostile = isHostile;
 
@@ -43,7 +43,7 @@ public class Rocket extends SolidObject {
 		makeBoundary(0.01, 0.025, 0.01);
 
 		// create 2D boundary
-		boundary2D = new Rectangle2D(x - 0.005, z + 0.005, 0.01, 0.01);
+		boundary2D = new rectangle2D(x - 0.005, z + 0.005, 0.01, 0.01);
 
 		// adjust orientation of the model
 		iDirection.rotate_XZ(angle);
@@ -51,7 +51,7 @@ public class Rocket extends SolidObject {
 
 		// find the initial move direction, it will likely to change if the
 		// target moves
-		direction = new Vector(0, 0, 0.075);
+		direction = new vector(0, 0, 0.075);
 		direction.rotate_XZ(angle);
 
 		lifeSpan = 38;
@@ -61,10 +61,10 @@ public class Rocket extends SolidObject {
 
 		makePolygons();
 
-		Vector[] v = new Vector[] { put(-0.15, -0.05, 0.15),
+		vector[] v = new vector[] { put(-0.15, -0.05, 0.15),
 				put(0.15, -0.05, 0.15), put(0.15, -0.05, -0.15),
 				put(-0.15, -0.05, -0.15) };
-		rocketAura = new Polygon3D(v, v[0], v[1], v[3], Main.textures[21], 1,
+		rocketAura = new polygon3D(v, v[0], v[1], v[3], main.textures[21], 1,
 				1, 2);
 
 	}
@@ -72,48 +72,48 @@ public class Rocket extends SolidObject {
 	// Construct polygons for this model.
 	// The polygon data is hard-coded here
 	public void makePolygons() {
-		Vector[] v;
-		polygons = new Polygon3D[17];
+		vector[] v;
+		polygons = new polygon3D[17];
 
 		double r = 0.007;
 		double theta = Math.PI / 4;
 
 		for (int i = 0; i < 8; i++) {
-			v = new Vector[] {
+			v = new vector[] {
 					put(r * Math.cos(i * theta), r * Math.sin(i * theta), -0.03),
 					put(r * Math.cos((i + 1) * theta), r
 							* Math.sin((i + 1) * theta), -0.03),
 					put(r * Math.cos((i + 1) * theta), r
 							* Math.sin((i + 1) * theta), 0.03),
 					put(r * Math.cos(i * theta), r * Math.sin(i * theta), 0.03) };
-			polygons[i] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[25],
+			polygons[i] = new polygon3D(v, v[0], v[1], v[3], main.textures[25],
 					1, 1, 6);
 		}
 
-		v = new Vector[8];
+		v = new vector[8];
 		for (int i = 1; i < 9; i++)
 			v[8 - i] = put(r * Math.cos(i * theta), r * Math.sin(i * theta),
 					-0.03);
-		polygons[8] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[16], 1,
+		polygons[8] = new polygon3D(v, v[0], v[1], v[3], main.textures[16], 1,
 				1, 6);
 		polygons[8].constantI = true;
 
 		for (int i = 0; i < 8; i++) {
-			v = new Vector[] {
+			v = new vector[] {
 					put(r * Math.cos(i * theta), r * Math.sin(i * theta), 0.03),
 					put(r * Math.cos((i + 1) * theta), r
 							* Math.sin((i + 1) * theta), 0.03),
 					put(0, 0, 0.05),
 
 			};
-			polygons[9 + i] = new Polygon3D(v, v[0], v[1], v[2],
-					Main.textures[26], 1, 1, 6);
+			polygons[9 + i] = new polygon3D(v, v[0], v[1], v[2],
+					main.textures[26], 1, 1, 6);
 		}
 
 	}
 
 	// return the 2D boundary of this model
-	public Rectangle2D getBoundary2D() {
+	public rectangle2D getBoundary2D() {
 		return boundary2D;
 	}
 
@@ -140,9 +140,9 @@ public class Rocket extends SolidObject {
 			}
 			rocketAura.update();
 
-			rocketAura.myTexture.Texture = rocketAura.myTexture.lightMapData[1 + (GameData
+			rocketAura.myTexture.Texture = rocketAura.myTexture.lightMapData[1 + (gameData
 					.getRandom() % 3) * 2];
-			Rasterizer.rasterize(rocketAura);
+			rasterizer.rasterize(rocketAura);
 
 		}
 
@@ -150,12 +150,12 @@ public class Rocket extends SolidObject {
 		if (!isHostile) {
 			// if the rocket is fired by player, then set the target location to
 			// the centre of the nearest enemy
-			tempVector1.set(PlayerTank.bodyCenter);
+			tempVector1.set(playerTank.bodyCenter);
 			tempVector2.set(0, 0, 0.15);
-			tempVector2.rotate_XZ(PlayerTank.turretAngle);
+			tempVector2.rotate_XZ(playerTank.turretAngle);
 
 			for (int i = 0; i < 20; i++, tempVector1.add(tempVector2)) {
-				targetLocation = ObstacleMap.isOccupied3(tempVector1);
+				targetLocation = obstacleMap.isOccupied3(tempVector1);
 				if (targetLocation != null)
 					break;
 			}
@@ -168,7 +168,7 @@ public class Rocket extends SolidObject {
 		} else {
 			// if the rocket is fired by enemy, t hen set the target location to
 			// the centre of player tank
-			targetLocation = PlayerTank.bodyCenter;
+			targetLocation = playerTank.bodyCenter;
 		}
 
 		// find direction based on the target location
@@ -207,19 +207,19 @@ public class Rocket extends SolidObject {
 		// check whether the rocket emembeded into other objects.
 		int position = (int) (boundary2D.xPos * 4)
 				+ (129 - (int) (boundary2D.yPos * 4)) * 80;
-		if (ObstacleMap.projectileCollideObstacle2(this, position, isHostile)) {
+		if (obstacleMap.projectileCollideObstacle2(this, position, isHostile)) {
 			lifeSpan = -1;
 			// generate explosion
 			centre.add(direction);
-			Explosion theExplosion = new Explosion(centre.x, centre.y,
+			explosion theExplosion = new explosion(centre.x, centre.y,
 					centre.z, 1);
 			theExplosion.damage = 10;
-			Projectiles.register(theExplosion);
+			projectiles.register(theExplosion);
 			return;
 		}
 
 		// send to draw list
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 
 		// update centre
 		centre.add(direction);
@@ -227,9 +227,9 @@ public class Rocket extends SolidObject {
 		// find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 
 		// update 3D boundary
 		for (int i = 0; i < 5; i++) {
@@ -259,16 +259,16 @@ public class Rocket extends SolidObject {
 		// down to zero, it will explode and cause damage.
 		if (lifeSpan < 0) {
 			// generate explosion
-			Explosion theExplosion = new Explosion(centre.x, centre.y,
+			explosion theExplosion = new explosion(centre.x, centre.y,
 					centre.z, 1);
 			theExplosion.damage = 10;
-			Projectiles.register(theExplosion);
+			projectiles.register(theExplosion);
 			return;
 		}
-		if (Main.timer % 2 == 0) {
+		if (main.timer % 2 == 0) {
 			centre.subtract(direction);
 			
-			Projectiles.register(new RocketTail(centre));
+			projectiles.register(new rocketTail(centre));
 			
 			centre.add(direction);
 		}

@@ -1,14 +1,14 @@
 package core;
 //a particle system that resembles the smoke from a badly damaged tank
-public class Smoke {
+public class smoke{
 	//the emitter (usually a badly damged unit)
-	public Model emitter;
+	public model emitter;
 	
 	//particles
-	public Vector[] particles;
+	public vector[] particles;
 	
 	//temp vector
-	public Vector temp;
+	public vector temp;
 	
 	//alpha mask
 	public int ALPHA=0xFF000000; 
@@ -16,26 +16,26 @@ public class Smoke {
 	//a flag to turn smoke on and off
 	public boolean stopped;
 	
-	public Vector soruceCentre;
+	public vector soruceCentre;
 	
 	
-	public Smoke(Model emitter){
+	public smoke(model emitter){
 		this.emitter = emitter;
 		
 		if(emitter != null)
 			soruceCentre = emitter.getRealCentre();
 		
 		//init particles
-		particles = new Vector[40];
-		temp = new Vector(0,0,0);
+		particles = new vector[40];
+		temp = new vector(0,0,0);
 	}
 	
-	public Smoke(Vector soruceCentre){
+	public smoke(vector soruceCentre){
 		this.soruceCentre = soruceCentre;
 		
 		//init particles
-		particles = new Vector[40];
-		temp = new Vector(0,0,0);
+		particles = new vector[40];
+		temp = new vector(0,0,0);
 	}
 	
 	
@@ -51,9 +51,9 @@ public class Smoke {
 				continue;
 			
 			temp.set(particles[i]);
-			temp.subtract(Camera.position);
-			temp.rotate_XZ(Camera.XZ_angle);
-			temp.rotate_YZ(Camera.YZ_angle);
+			temp.subtract(camera.position);
+			temp.rotate_XZ(camera.XZ_angle);
+			temp.rotate_YZ(camera.YZ_angle);
 			temp.updateLocation();
 			
 			if(temp.screenX >= 2 && temp.screenX <638 && temp.screenY >=0 && temp.screenY < 480){
@@ -89,14 +89,14 @@ public class Smoke {
 					spriteIndex = 7;
 				}
 				
-				for(int j = 0; j < GameData.size[spriteIndex].length; j++){
-					position = centre + GameData.size[spriteIndex][j];
+				for(int j = 0; j < gameData.size[spriteIndex].length; j++){
+					position = centre + gameData.size[spriteIndex][j];
 					if(position >= 0 && position < 307200){
-						color = Main.screen[position];
+						color = main.screen[position];
 						r=(((color>>16)&255)*factor)>>8;
 						g=(((color>>8)&255)*factor)>>8;
 						b=((color&255)*factor)>>8;
-						Main.screen[position]= ALPHA|(r<<16)|(g<<8)|b;
+						main.screen[position]= ALPHA|(r<<16)|(g<<8)|b;
 					}
 				}
 			
@@ -115,8 +115,8 @@ public class Smoke {
 				break;
 			}else{
 				if(particles[i] != null){
-					if(Main.timer%2 == 0)
-						particles[i].add(GameData.getRandomVector());
+					if(main.timer%2 == 0)
+						particles[i].add(gameData.getRandomVector());
 					else
 						particles[i].y+=0.01;
 					if(particles[i].y >= -0.5){

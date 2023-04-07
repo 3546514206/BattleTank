@@ -1,18 +1,18 @@
 package core;
 //Energy fence
-public class Fence extends SolidObject {
+public class fence extends solidObject{
 	
 	//the polygons of the model
-	private Polygon3D[] polygons;
+	private polygon3D[] polygons; 
 	
 	//0 = vertical   1 = horizontal 
 	public int orientation;
 	
-	public Fence(double x, double y, double z, int orientation){
-		start = new Vector(x,y,z);
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+	public fence(double x, double y, double z, int orientation){
+		start = new vector(x,y,z);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 		if(orientation == 0){
 			iDirection.rotate_XZ(90);
@@ -25,14 +25,14 @@ public class Fence extends SolidObject {
 		
 		//create 2D boundary
 		if(orientation == 0){
-			boundary2D = new Rectangle2D(x - 0.06, z + 0.17, 0.12, 0.34);
-			ObstacleMap.registerObstacle2(this, (int)(x*4) + (129-(int)(z*4))*80);
+			boundary2D = new rectangle2D(x - 0.06, z + 0.17, 0.12, 0.34);
+			obstacleMap.registerObstacle2(this, (int)(x*4) + (129-(int)(z*4))*80);
 		
 		}
 		
 		if(orientation == 1){
-			boundary2D = new Rectangle2D(x - 0.17, z + 0.06, 0.34, 0.12);
-			ObstacleMap.registerObstacle2(this, (int)(x*4) + (129-(int)(z*4))*80);
+			boundary2D = new rectangle2D(x - 0.17, z + 0.06, 0.34, 0.12);
+			obstacleMap.registerObstacle2(this, (int)(x*4) + (129-(int)(z*4))*80);
 		
 		}
 		
@@ -45,18 +45,18 @@ public class Fence extends SolidObject {
 	//	Construct polygons for this model.
 	//The polygon data is hard-coded here
 	public void makePolygons(){
-		Vector[] v;
+		vector[] v;
 	
-		polygons = new Polygon3D[2];
-		v = new Vector[]{put(-0.125, 0.14, 0), put(0.125, 0.14, 0), put(0.125, -0.1, 0) ,put(-0.125, -0.1, 0)};
-		polygons[0] = new Polygon3D(v, new Vector(-1, -1, 1), new Vector(1, -1, 1), new Vector(-1, -1, -1), null, 1, 1, 9);
+		polygons = new polygon3D[2];
+		v = new vector[]{put(-0.125, 0.14, 0), put(0.125, 0.14, 0), put(0.125, -0.1, 0) ,put(-0.125, -0.1, 0)};
+		polygons[0] = new polygon3D(v, new vector(-1, -1, 1), new vector(1, -1, 1), new vector(-1, -1, -1), null, 1, 1, 9);
 		
-		v = new Vector[]{put(-0.125, -0.1, 0), put(0.125, -0.1, 0), put(0.125, 0.14, 0),put(-0.125, 0.14, 0)};
-		polygons[1] = new Polygon3D(v, new Vector(-1, -1, 1), new Vector(1, -1, 1), new Vector(-1, -1, -1), null, 1, 1, 9);
+		v = new vector[]{put(-0.125, -0.1, 0), put(0.125, -0.1, 0), put(0.125, 0.14, 0),put(-0.125, 0.14, 0)};
+		polygons[1] = new polygon3D(v, new vector(-1, -1, 1), new vector(1, -1, 1), new vector(-1, -1, -1), null, 1, 1, 9);
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	
@@ -65,9 +65,9 @@ public class Fence extends SolidObject {
 		//find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		tempCentre.updateLocation();
 		
 		//test whether the model is visible by comparing the 2D position of its centre point and the screen area
@@ -77,7 +77,7 @@ public class Fence extends SolidObject {
 		}
 		visible = true;
 		
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 		
 		//update boundary
 		for(int i = 0; i < 5; i++)
@@ -91,7 +91,7 @@ public class Fence extends SolidObject {
 	
 	public void destory(){
 		int position = (int)(start.x*4) + (129-(int)(start.z*4))*80;
-		ObstacleMap.removeObstacle2(position);
+		obstacleMap.removeObstacle2(position);
 	}
 	
 	public void draw(){

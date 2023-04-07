@@ -1,6 +1,6 @@
 package core;
 
-public class Explosion extends SolidObject {
+public class explosion extends solidObject{
 	
 	//size of the explosion 
 	double size;
@@ -26,15 +26,15 @@ public class Explosion extends SolidObject {
 	//Enable this boolean if this explosion has be to drawn explicitly
 	public boolean explicitDrawing;
 	
-	public Polygon3D explosionAura;
+	public polygon3D explosionAura;
 	
-	public Explosion(double x, double y, double z, double size){
-		start = new Vector(x,y,z);
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+	public explosion(double x, double y, double z, double size){
+		start = new vector(x,y,z);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
-		int random = GameData.getRandom();
+		int random = gameData.getRandom();
 		if(random >= 75 )
 			spriteIndex = 17;
 		else if(random >= 50 )
@@ -48,11 +48,11 @@ public class Explosion extends SolidObject {
 			spriteIndex = 18;
 		
 		
-		Vector[] v = new Vector[]{put(-0.3, 0, 0.3), put(0.3, 0, 0.3), put(0.3, 0, -0.3),put(-0.3, 0, -0.3)};
+		vector[] v = new vector[]{put(-0.3, 0, 0.3), put(0.3, 0, 0.3), put(0.3, 0, -0.3),put(-0.3, 0, -0.3)};
 		if(size > 3)
-			v = new Vector[]{put(-0.12, 0, 0.12), put(0.12, 0, 0.12), put(0.12, 0, -0.12),put(-0.12, 0, -0.12)};
+			v = new vector[]{put(-0.12, 0, 0.12), put(0.12, 0, 0.12), put(0.12, 0, -0.12),put(-0.12, 0, -0.12)};
 		
-		explosionAura = new Polygon3D(v, v[0], v[1], v[3], Main.textures[21], 1, 1, 2);
+		explosionAura = new polygon3D(v, v[0], v[1], v[3], main.textures[21], 1, 1, 2);
 		
 		this.size = size;
 		
@@ -61,7 +61,7 @@ public class Explosion extends SolidObject {
 		makeBoundary(0.001, 0.001, 0.001);
 		
 		//create 2D boundary
-		boundary2D = new Rectangle2D(x - 0.1, z + 0.1, 0.2, 0.2);
+		boundary2D = new rectangle2D(x - 0.1, z + 0.1, 0.2, 0.2);
 		
 		lifeSpan = 16;
 		
@@ -81,26 +81,26 @@ public class Explosion extends SolidObject {
 			explosionAura.update();
 			if(explosionAura.visible){
 				explosionAura.myTexture.Texture = explosionAura.myTexture.lightMapData[auraIndex];
-				Rasterizer.rasterize(explosionAura);
+				rasterizer.rasterize(explosionAura);
 			}
 		}
 		auraIndex++;
 		
 		//send to draw list
 		if(!explicitDrawing)
-			ModelDrawList.register(this);
+			modelDrawList.register(this);
 		
 		//find centre in camera coordinate
 		
 		tempCentre.set(centre);
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		
 		
 		//damage nearby units
 		if(lifeSpan == 15 && damage != 0){
-			ObstacleMap.damageType2Obstacles(damage, boundary2D, groundZero);
+			obstacleMap.damageType2Obstacles(damage, boundary2D, groundZero);
 		}
 		
 		lifeSpan--;
@@ -123,15 +123,15 @@ public class Explosion extends SolidObject {
 		
 		
 		
-		Rasterizer.temp = this.type;
-		Rasterizer.renderExplosionSprite(Main.textures[spriteIndex].explosions[frameIndex],ratio, tempCentre.screenX, tempCentre.screenY, 64, 64);
+		rasterizer.temp = this.type; 
+		rasterizer.renderExplosionSprite(main.textures[spriteIndex].explosions[frameIndex],ratio, tempCentre.screenX, tempCentre.screenY, 64, 64);
 		
 		frameIndex++;
 		
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 }

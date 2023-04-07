@@ -1,14 +1,14 @@
 package core;
 //Store useful arithmetic data for the game engine such as 
 //Cos/Sin look up table, color palette, etc...
-public class GameData {
+public class gameData {
 	public static int[] random;
 	public static int randomIndex;
 	public static double[] sin;  
 	public static double[] cos;
 	public static int[][] colorTable;
 	public static int[] screenTable;
-	public static Vector[] randomVectors;
+	public static vector[] randomVectors;
 	public static int[][] size; 
 	public static int[] distortion1;
 	public static short[] distortion2;
@@ -117,9 +117,9 @@ public class GameData {
 		colorTableTemp = null;
 		
 		//create randomVectors, they will be used in generating smoke particles
-		randomVectors = new Vector[1000];
+		randomVectors = new vector[1000];
 		for(int i = 0; i < 1000; i++)
-			randomVectors[i] = new Vector(Math.random()*0.016 - 0.008, 0.01, Math.random()*0.016 - 0.008);
+			randomVectors[i] = new vector(Math.random()*0.016 - 0.008, 0.01, Math.random()*0.016 - 0.008);
 		
 		//generate sprites for particles with different size
 		size = new int[9][];
@@ -183,7 +183,7 @@ public class GameData {
 	}
 	
 	//get a random vector
-	public static Vector getRandomVector(){
+	public static vector getRandomVector(){
 		randomIndex++;
 		if(randomIndex >= 1000)
 			randomIndex=0;

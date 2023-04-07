@@ -18,32 +18,32 @@ package core;
 
 
 
-public class Rasterizer {
+public class rasterizer {
 	//The 2 arrays will hold the scan lines of the polygon
 	public static int[] xLow = new int[480], xHigh = new int[480];
 	
 	//Texture coordinate vectors
-	public static Vector
-	W = new Vector(0,0,0),
-	O = new Vector(0,0,0),
-	V = new Vector(0,0,0),
-	U = new Vector(0,0,0),
-	A = new Vector(0,0,0),
-	B = new Vector(0,0,0),
-	C = new Vector(0,0,0);
+	public static vector 
+	W = new vector(0,0,0),
+	O = new vector(0,0,0), 
+	V = new vector(0,0,0), 
+	U = new vector(0,0,0), 
+	A = new vector(0,0,0), 
+	B = new vector(0,0,0), 
+	C = new vector(0,0,0);
 	
 	//A pool of vectors which will be used for vector arithmetic
-	public static Vector
-		tempVector1 = new Vector(0,0,0),
-		tempVector2 = new Vector(0,0,0),
-		tempVector3 = new Vector(0,0,0),
-		tempVector4 = new Vector(0,0,0);
+	public static vector 
+		tempVector1 = new vector(0,0,0),
+		tempVector2 = new vector(0,0,0),
+		tempVector3 = new vector(0,0,0),
+		tempVector4 = new vector(0,0,0);
 	
 	//the polygon that rasterizer is working on
-	public static Polygon3D poly;
+	public static polygon3D poly;
 	
 	//these variables will represent their equivalents in the polygon3D class during rasterization
-	public static Vector[] tempVertex, vertex2D;
+	public static vector[] tempVertex, vertex2D;
 	public static int L, widthMask, heightMask, widthBits, diffuse_I;
 	public static double A_offset, B_offset, C_offset;
 	
@@ -61,7 +61,7 @@ public class Rasterizer {
 	
 	
 	//start rasterization
-	public static void rasterize(Polygon3D polygon){
+	public static void rasterize(polygon3D polygon){
 		poly = polygon;
 		L = poly.L;
 		widthMask = poly.widthMask;
@@ -111,19 +111,19 @@ public class Rasterizer {
 	//calculate O,U and V
 	public static void findVectorOUV(){
 		O.set(poly.origin);
-		O.subtract(Camera.position);
-		O.rotate_XZ(Camera.XZ_angle);
-		O.rotate_YZ(Camera.YZ_angle);
+		O.subtract(camera.position);
+		O.rotate_XZ(camera.XZ_angle);
+		O.rotate_YZ(camera.YZ_angle);
 
 		U.set(poly.rightEnd);
-		U.subtract(Camera.position);
-		U.rotate_XZ(Camera.XZ_angle);
-		U.rotate_YZ(Camera.YZ_angle);
+		U.subtract(camera.position);
+		U.rotate_XZ(camera.XZ_angle);
+		U.rotate_YZ(camera.YZ_angle);
 
 		V.set(poly.bottomEnd);
-		V.subtract(Camera.position);
-		V.rotate_XZ(Camera.XZ_angle);
-		V.rotate_YZ(Camera.YZ_angle);
+		V.subtract(camera.position);
+		V.rotate_XZ(camera.XZ_angle);
+		V.rotate_YZ(camera.YZ_angle);
 		
 		U.subtract(O);
 		U.unit();
@@ -166,7 +166,7 @@ public class Rasterizer {
 	}
 	
 	//find the approximate projection point on the clipping plane
-	public static void approximatePoint(int index, Vector behindPoint, Vector frontPoint){
+	public static void approximatePoint(int index, vector behindPoint, vector frontPoint){
 		tempVector1.set(frontPoint.x - behindPoint.x, frontPoint.y - behindPoint.y, frontPoint.z - behindPoint.z);
 		tempVector1.scale(frontPoint.z/tempVector1.z);
 		vertex2D[index].set(frontPoint.x, frontPoint.y, frontPoint.z);
@@ -183,8 +183,8 @@ public class Rasterizer {
 		int g = 0;
 
 		for(int i = 0; i < visibleCount; i++){
-			Vector v1 = vertex2D[i];
-			Vector v2;
+			vector v1 = vertex2D[i];
+			vector v2;
 			
 			if(i == visibleCount -1 ){
 				v2 = vertex2D[0];
@@ -197,7 +197,7 @@ public class Rasterizer {
 			//ensure v1.y < v2.y;
 			if (v1.screenY> v2.screenY) {
 				downwards = true;
-				Vector temp = v1;
+				vector temp = v1;
 				v1 = v2;
 				v2 = temp;
 			}
@@ -276,12 +276,12 @@ public class Rasterizer {
 	//the z depth will be constant along a scanline(provide it never undergo
 	//z-axis rotation). As the result, only 2 perspective corrections are needed for every scanline.
 	public static void renderTerrain(){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		short[] Texture = poly.myTexture.Texture; 
-		int[][] colorTable = GameData.colorTable;
-		short[] lightMap = Main.lightMap;
-		boolean[] terrainBuffer = Main.terrainBuffer;
-		boolean flag = Main.terrainBufferFlag;
+		int[][] colorTable = gameData.colorTable;
+		short[] lightMap = main.lightMap;
+		boolean[] terrainBuffer = main.terrainBuffer;
+		boolean flag = main.terrainBufferFlag;
 		
 		A_offset = A.x*2048;
 		B_offset = B.x*2048;
@@ -293,7 +293,7 @@ public class Rasterizer {
 		//iterate through the scan lines
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			W.set(xLow[i]-320, -i + 240, Vector.Z_length);
+			W.set(xLow[i]-320, -i + 240, vector.Z_length);
 			aDotW = A.dot(W);
 			bDotW = B.dot(W);
 			cDotW = C.dot(W);
@@ -315,7 +315,7 @@ public class Rasterizer {
 			dx = BigDx>>16;
 			dy = BigDy>>16;
 			
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 		
 			X = BigX >>16;
@@ -341,7 +341,7 @@ public class Rasterizer {
 	//the polygon  to the lightmap light  buffer instead of
 	//screen buffer. (notice that this light map only apply to floor)
 	public static void renderLightMap(){
-		short[] lightMap = Main.lightMap;
+		short[] lightMap = main.lightMap;
 		short[] Texture = poly.myTexture.Texture; 
 		variation = poly.variation;
 		
@@ -355,7 +355,7 @@ public class Rasterizer {
 		//iterate through the scan lines
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			W.set(xLow[i]-320, -i + 240, Vector.Z_length);
+			W.set(xLow[i]-320, -i + 240, vector.Z_length);
 			aDotW = A.dot(W);
 			bDotW = B.dot(W);
 			cDotW = C.dot(W);
@@ -375,7 +375,7 @@ public class Rasterizer {
 			dx = BigDx>>16;
 			dy = BigDy>>16;
 			
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 		
 			X = BigX >>16;
@@ -427,8 +427,8 @@ public class Rasterizer {
 	//buffer, then copy the content of the stencil buffer to screen buffer.
 	//This procedure is used to create water ripples.
 	public static void renderWater(){
-		int[] screen = Main.screen;
-		int[] stencilBuffer = Main.stencilBuffer;
+		int[] screen = main.screen;
+		int[] stencilBuffer = main.stencilBuffer;
 		byte[] Texture = poly.myTexture.waterWave[poly.myTexture.waveIndex]; 
 		int temp;
 		double scale;
@@ -443,7 +443,7 @@ public class Rasterizer {
 		//iterate through the scan lines,
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			W.set(xLow[i]-320, -i + 240, Vector.Z_length);
+			W.set(xLow[i]-320, -i + 240, vector.Z_length);
 			scale = Math.min(1400.0/(i*1.1+1), 15);
 			
 			
@@ -467,7 +467,7 @@ public class Rasterizer {
 			dx = BigDx>>16;
 			dy = BigDy>>16;
 			
-			temp = GameData.screenTable[i];
+			temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 		
 			X = BigX >>16;
@@ -491,7 +491,7 @@ public class Rasterizer {
 		//copy the content of the stencil buffer to screen buffer.
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			temp = GameData.screenTable[i];
+			temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 			for(k = offset; k >0; k--, index++)
 				screen[index] = stencilBuffer[index];
@@ -500,8 +500,8 @@ public class Rasterizer {
 	
 	//render transparent polygon from a stealth tank
 	public static void renderTransparent1(){
-		int[] screen = Main.screen;
-		int[] stencilBuffer = Main.stencilBuffer;
+		int[] screen = main.screen;
+		int[] stencilBuffer = main.stencilBuffer;
 		
 
 		
@@ -509,7 +509,7 @@ public class Rasterizer {
 		int end = poly.end;
 		
 		for(int i = start; i <= end; i++){
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index;
 			for(int j = xLow[i]; j < xHigh[i]; j++){
 				index = j + temp;
@@ -518,7 +518,7 @@ public class Rasterizer {
 				X =(j+xOffset) % 128;
 				Y = i % 128;
 				
-				temp1 = GameData.distortion1[X+Y*128];
+				temp1 = gameData.distortion1[X+Y*128];
 				temp1 = index + (int)(temp1/scale)*640;
 				if(temp1< 0 || temp1 >= 307200)
 					temp1 = index;
@@ -531,7 +531,7 @@ public class Rasterizer {
 		//copy the content of the stencil buffer to screen buffer.
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			temp = GameData.screenTable[i];
+			temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 			for(k = offset; k >0; k--, index++)
 				screen[index] = stencilBuffer[index];
@@ -541,8 +541,8 @@ public class Rasterizer {
 	
 	//render transparent polygon of a energy fence
 	public static void renderTransparent2(){
-		int[] screen = Main.screen;
-		int[] stencilBuffer = Main.stencilBuffer;
+		int[] screen = main.screen;
+		int[] stencilBuffer = main.stencilBuffer;
 		
 
 		
@@ -554,7 +554,7 @@ public class Rasterizer {
 		
 		
 		for(int i = start; i <= end; i++){
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index;
 			
 			for(int j = xLow[i]; j < xHigh[i]; j++){
@@ -569,7 +569,7 @@ public class Rasterizer {
 				X%=128;
 				Y%=128;
 				
-				temp1 = GameData.distortion2[X+Y*128];
+				temp1 = gameData.distortion2[X+Y*128];
 				temp1 = index + (int)(temp1/(distanceScale*1.2))*640 + (int)(temp1/(distanceScale*1.2));
 				if(temp1< 0 || temp1 >= 307200)
 					temp1 = index;
@@ -582,7 +582,7 @@ public class Rasterizer {
 		//copy the content of the stencil buffer to screen buffer.
 		for(int i = start; i <= end; i++){
 			int offset = xHigh[i] - xLow[i];
-			temp = GameData.screenTable[i];
+			temp = gameData.screenTable[i];
 			int index = xLow[i] + temp;
 			for(k = offset; k >0; k--, index++){
 				temp1 =stencilBuffer[index];
@@ -602,10 +602,10 @@ public class Rasterizer {
 	//Unlike terrain polygons, these polygons need to undergo
 	//prespective corrections every 16 pixels in a scanline.
 	public static void renderModel(){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		short[] Texture = poly.myTexture.Texture; 
 		diffuse_I = poly.diffuse_I;
-		int[]colorTable = GameData.colorTable[diffuse_I];
+		int[]colorTable = gameData.colorTable[diffuse_I];
 	
 		A_offset = A.x*16;
 		B_offset = B.x*16;
@@ -617,7 +617,7 @@ public class Rasterizer {
 		int end = poly.end;
 		
 		for(int i = start; i <= end; i++){
-			W.set(xLow[i]-320, -i + 240, Vector.Z_length);
+			W.set(xLow[i]-320, -i + 240, vector.Z_length);
 			aDotW = A.dot(W);
 			bDotW = B.dot(W);
 			cDotW = C.dot(W);
@@ -629,7 +629,7 @@ public class Rasterizer {
 			X1 = X;
 			Y1 = Y;
 			
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index;
 			for(int j = xLow[i]; j < xHigh[i]; j+=16){
 				X = X1;
@@ -709,7 +709,7 @@ public class Rasterizer {
 	//it is similar to renderModel excpet it only changes the
 	//brightness of the pixels.
 	public static void renderLightMap2(){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		short[] Texture = poly.myTexture.Texture; 
 	
 		A_offset = A.x*16;
@@ -722,7 +722,7 @@ public class Rasterizer {
 		int end = poly.end;
 		
 		for(int i = start; i <= end; i++){
-			W.set(xLow[i]-320, -i + 240, Vector.Z_length);
+			W.set(xLow[i]-320, -i + 240, vector.Z_length);
 			aDotW = A.dot(W);
 			bDotW = B.dot(W);
 			cDotW = C.dot(W);
@@ -734,7 +734,7 @@ public class Rasterizer {
 			X1 = X;
 			Y1 = Y;
 			
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index;
 		
 			for(int j = xLow[i]; j < xHigh[i]; j+=16){
@@ -821,8 +821,8 @@ public class Rasterizer {
 	
 	//rendering polygon that has a soild color
 	public static void renderSoildPolygon(){
-		int soildColor = GameData.colorTable[poly.diffuse_I][poly.color];
-		int[] screen = Main.screen;
+		int soildColor = gameData.colorTable[poly.diffuse_I][poly.color];
+		int[] screen = main.screen;
 		
 		int start = poly.start;
 		int end = poly.end;
@@ -830,7 +830,7 @@ public class Rasterizer {
 		
 		
 		for(int i = start; i <= end; i++){
-			int temp = GameData.screenTable[i];
+			int temp = gameData.screenTable[i];
 			int index;
 			for(int j = xLow[i]; j < xHigh[i]; j++){
 				index = j + temp;
@@ -847,7 +847,7 @@ public class Rasterizer {
 	
 	//Texture mapper for rendering 2D explosion spites  
 	public static void renderExplosionSprite(int[] sprite, double ratio, int xPos, int yPos, int width, int height){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		
 		int originalWidth = width;
 		
@@ -944,7 +944,7 @@ public class Rasterizer {
 	
 	//the texture mapper for rendering smoke sprite
 	public static void renderSmokSprite(int[] sprite, double ratio, int xPos, int yPos, int width, int height, int alpha){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		int originalWidth = width;
 		
 		//find the size ratio between a sprite pixel and screen pixel
@@ -1023,7 +1023,7 @@ public class Rasterizer {
 	
 	//render text 
 	public static void renderText(boolean[] pixels, int xPos, int yPos, int size, int color){
-		int[] screen = Main.screen;
+		int[] screen = main.screen;
 		for(int i = 0; i < 1024; i ++){
 			int x = i%32;
 			int y = i/32;

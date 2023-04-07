@@ -1,18 +1,18 @@
 package core;
 import java.awt.*;
 
-public class Polygon3D {
+public class polygon3D {
 	//The vertex of the polygon with the respect of the world/camera coordinate
-	public Vector[] vertex3D, tempVertex;
+	public vector[] vertex3D, tempVertex;
 	
 	//The vertex of the polygon after clipping
-	public Vector[] vertex2D;
+	public vector[] vertex2D;
 	
 	//the normal of the polygon with the respect of the world/camera coordinate
-	public Vector realNormal, normal;
+	public vector realNormal, normal;
 	
 	//the centre of the polygon with the respect of the world/camera coordinate
-	public Vector realCentre, centre;
+	public vector realCentre, centre;
 	
 	//The number of vertex
 	public int L;
@@ -25,10 +25,10 @@ public class Polygon3D {
 	public boolean withinViewScreen;
 	
 	//These 3 vectors map the 3 corners of the texture to the world coordinate
-	public Vector origin, rightEnd, bottomEnd;
+	public vector origin, rightEnd, bottomEnd;
 	
 	//The texture that bonds to this polygon
-	public Texture myTexture;
+	public texture myTexture;
 	
 	//Information about the texture
 	public int textureWidth, textureHeight, heightMask, widthMask, widthBits, heightBits, bigHeight;
@@ -50,11 +50,11 @@ public class Polygon3D {
 	public short variation;
 	
 	//A pool of vectors which will be used for vector arithmetic
-	public static Vector
-		tempVector1 = new Vector(0,0,0),
-		tempVector2 = new Vector(0,0,0),
-		tempVector3 = new Vector(0,0,0),
-		tempVector4 = new Vector(0,0,0);
+	public static vector 
+		tempVector1 = new vector(0,0,0),
+		tempVector2 = new vector(0,0,0),
+		tempVector3 = new vector(0,0,0),
+		tempVector4 = new vector(0,0,0);
 	
 	//This varaible indicates whether the polygon is parallel to the X-Z plane in world coordinate.
 	public boolean faceVerticalPolygon;
@@ -82,7 +82,7 @@ public class Polygon3D {
 	public short color;
 	
 	//Constuctor of the polygon class, it will only accept convex polygons
-	public Polygon3D(Vector[] vertex3D, Vector origin, Vector rightEnd, Vector bottomEnd, Texture myTexture, double scaleX, double scaleY, int type){
+	public polygon3D(vector[] vertex3D, vector origin,  vector  rightEnd, vector bottomEnd,  texture myTexture, double scaleX, double scaleY, int type){
 		this.type = type;
 		this.vertex3D = vertex3D;
 		this.myTexture = myTexture;
@@ -91,9 +91,9 @@ public class Polygon3D {
 		diffuse_I = 31;
 		
 		//set the tempVertex to the vertex3D
-		tempVertex = new Vector[L];
+		tempVertex = new vector[L];
 		for(int i = 0; i < L; i++){
-			tempVertex[i] = new Vector(0,0,0);
+			tempVertex[i] = new vector(0,0,0);
 			tempVertex[i].set(vertex3D[i]);
 		}
 		
@@ -104,7 +104,7 @@ public class Polygon3D {
 		tempVector2.subtract(tempVertex[1]);
 		realNormal = tempVector1.cross(tempVector2);
 		realNormal.unit();
-		normal = new Vector(0,0,0);
+		normal = new vector(0,0,0);
 		normal.set(realNormal);
 		
 		//check whether this polygon is parallel to the X-Z plane
@@ -114,11 +114,11 @@ public class Polygon3D {
 			faceVerticalPolygon = false;
 		
 		//find centre of the polygon (in world coordinate)
-		realCentre = new Vector(0,0,0);
+		realCentre = new vector(0,0,0);
 		for(int i = 0; i < tempVertex.length; i++)
 			realCentre.add(tempVertex[i]);
 		realCentre.scale(1.0/tempVertex.length);
-		centre = new Vector(0,0,0);
+		centre = new vector(0,0,0);
 		centre.set(realCentre);
 		
 		if(origin != null){
@@ -155,9 +155,9 @@ public class Polygon3D {
 		
 		//init vertex2D, notice that the size of vertex2D is bigger than vertex3D, because after clipping
 		//it is possilbe to generate more vertex for the polygon.
-		vertex2D = new Vector[L+1];
+		vertex2D = new vector[L+1];
 		for(int i = 0; i < vertex2D.length; i++)
-			vertex2D[i] = new Vector(0,0,0);
+			vertex2D[i] = new vector(0,0,0);
 		
 		//find the initial diffuse intensity of this polygon
 		findDiffuse();
@@ -166,7 +166,7 @@ public class Polygon3D {
 	//update this polygon based on camera movement in each frame
 	public void update(){		
 		//back-face culling
-		tempVector1.set(Camera.position);
+		tempVector1.set(camera.position);
 		tempVector1.subtract(vertex3D[0]);
 		if(tempVector1.dot(realNormal) <= 0){
 			visible = false;
@@ -176,11 +176,11 @@ public class Polygon3D {
 		
 		//update vertex according to camera orientation
 		double x = 0,y = 0, z = 0, 
-		camX = Camera.position.x, camY = Camera.position.y, camZ = Camera.position.z,
-		sinXZ = GameData.sin[Camera.XZ_angle],
-		cosXZ = GameData.cos[Camera.XZ_angle],
-		sinYZ = GameData.sin[Camera.YZ_angle],
-		cosYZ = GameData.cos[Camera.YZ_angle];
+		camX = camera.position.x, camY = camera.position.y, camZ = camera.position.z,
+		sinXZ = gameData.sin[camera.XZ_angle], 
+		cosXZ = gameData.cos[camera.XZ_angle],
+		sinYZ = gameData.sin[camera.YZ_angle], 
+		cosYZ = gameData.cos[camera.YZ_angle];
 		
 		for(int i = 0; i < L; i++){
 			//shifting
@@ -216,7 +216,7 @@ public class Polygon3D {
 		bound.setSize( xMax-xMin + 1, yMax-yMin);
 			
 		//Test whether the rectangle intersects the screen.
-		visible = Camera.screen.intersects(bound);
+		visible = camera.screen.intersects(bound);
 		
 	
 		if(visible){
@@ -237,7 +237,7 @@ public class Polygon3D {
 			centre.scale(1.0/L);
 			
 			//test whether the polygon is completely inside the screen area
-			withinViewScreen = Camera.screen.contains(xMin, yMin) && Camera.screen.contains(xMax, yMax);
+			withinViewScreen = camera.screen.contains(xMin, yMin) && camera.screen.contains(xMax, yMax);
 		}
 	}
 	
@@ -265,8 +265,8 @@ public class Polygon3D {
 	public void draw(){
 		//send this polygon to rasterizer
 		if(visible){
-			Main.polyCount++;
-			Rasterizer.rasterize(this);
+			main.polyCount++;
+			rasterizer.rasterize(this);
 		}
 	}
 }

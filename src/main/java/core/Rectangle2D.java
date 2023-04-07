@@ -2,7 +2,7 @@ package core;
 //This class is similar to the rectangle class in java awt, except it handles floating points.
 //Also unlike the rectangle in awt, the positive y axis points up
 
-public class Rectangle2D {
+public class rectangle2D {
 	//the top left coordinates
 	public double xPos; 
 	public double yPos;
@@ -12,7 +12,7 @@ public class Rectangle2D {
 	
 	public double radius;
 	
-	public Rectangle2D(double xPos, double yPos, double length, double height){
+	public rectangle2D(double xPos, double yPos, double length, double height){
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.length = length;
@@ -21,7 +21,7 @@ public class Rectangle2D {
 	}
 	
 	//test if 2 rectangeles intersect each other
-	public static boolean testIntersection(Rectangle2D rect1, Rectangle2D rect2){
+	public static boolean testIntersection(rectangle2D rect1, rectangle2D rect2){
 		
 		double bottom1 = rect1.yPos - rect1.height;
 		double bottom2 = rect2.yPos - rect2.height;
@@ -45,7 +45,7 @@ public class Rectangle2D {
 	}
 	
 	//change the origin of the rectangle
-	public void update(Vector displacement){
+	public void update(vector displacement){
 		xPos+=displacement.x;
 		yPos+=displacement.z;
 	}

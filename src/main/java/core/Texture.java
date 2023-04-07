@@ -3,7 +3,7 @@ package core;
 import java.awt.image.PixelGrabber;
 import java.awt.*;
 
-public class Texture {
+public class texture {
 	//holds the pixel data
 	public short[] Texture;
 	
@@ -26,7 +26,7 @@ public class Texture {
 	
 	
 	//produce a texture with a given  type
-	public Texture(Image img, int widthBits , int heightBits, String type){
+	public texture(Image img, int widthBits , int heightBits, String type){
 		this.widthBits = widthBits;
 		this.heightBits = heightBits;
 

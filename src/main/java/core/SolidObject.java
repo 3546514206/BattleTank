@@ -1,26 +1,26 @@
 package core;
 
-public abstract class SolidObject implements Model {
+public abstract class solidObject implements model{
 	//	the reference point of the model (in world coordinate)
-	protected Vector start;
+	protected vector start;
 	
 	//the refrerence axis of the model  (in world coordinate)
-	protected Vector iDirection, jDirection, kDirection;
+	protected vector iDirection, jDirection, kDirection;
 	 
 	//A rough cuboid boundary of this model, contains 5 polygons
-	protected Polygon3D[] boundary;
+	protected polygon3D[] boundary;
 	
 	//A rough 2D boundary of this model
-	protected Rectangle2D boundary2D;
+	protected rectangle2D boundary2D; 
 	
 	//whether this model need to be sent to drawing pipeline
 	protected boolean visible;
 	
 	//the centre of the model in world coordinate
-	protected Vector centre;
+	protected vector centre;
 	
 	//the centre of the model in camera coordinate
-	protected Vector tempCentre = new Vector(0,0,0);
+	protected vector tempCentre = new vector(0,0,0);
 	
 	//the current life span of the object, the object is expired if the value is less than 0
 	protected int lifeSpan;
@@ -36,17 +36,17 @@ public abstract class SolidObject implements Model {
 	protected int modelType;
 	
 	//get a rough 3D boundary of the model in camera coordinate
-	public final Polygon3D[] getBoundary(){
+	public final polygon3D[] getBoundary(){
 		return boundary;
 	}
 
 	//get centre of this model in camera coordinate
-	public final Vector getCentre(){
+	public final vector getCentre(){
 		return tempCentre;
 	}
 	
 	//return centre in world coordinate
-	public final Vector getRealCentre(){
+	public final vector getRealCentre(){
 		return centre;
 	}
 
@@ -62,17 +62,17 @@ public abstract class SolidObject implements Model {
 	//Create a rough 3D cuboid boundary for this model.
 	//It consists 5 polygons, they are facing front, right, back, left, top respectively. (no bottom)
 	public final void makeBoundary(double l, double h, double w){
-		boundary = new Polygon3D[5];
-		Vector[] front = new Vector[]{put(l, h, w), put(-l, h, w), put(-l, -h, w), put(l, -h, w)};
-		boundary[0] = new Polygon3D(front, null, null, null, null, 0,0,0);
-		Vector[] right = new Vector[]{put(l, h, -w), put(l, h, w), put(l, -h, w), put(l, -h, -w)};
-		boundary[1] = new Polygon3D(right, null, null, null, null, 0,0,0);
-		Vector[] back = new Vector[]{put(-l, h, -w), put(l, h, -w), put(l, -h, -w), put(-l, -h, -w)};
-		boundary[2] = new Polygon3D(back, null, null, null, null, 0,0,0);
-		Vector[] left = new Vector[]{put(-l, h, w), put(-l, h, -w), put(-l, -h, -w), put(-l, -h, w)};
-		boundary[3] = new Polygon3D(left, null, null, null, null, 0,0,0);
-		Vector[] top = new Vector[]{put(-l, h, w), put(l, h, w), put(l, h, -w), put(-l, h, -w)};
-		boundary[4] = new Polygon3D(top, null, null, null, null, 0,0,0);
+		boundary = new polygon3D[5];
+		vector[] front = new vector[]{put(l, h, w), put(-l, h, w), put(-l, -h, w), put(l, -h, w)};
+		boundary[0] = new polygon3D(front, null, null, null, null, 0,0,0);
+		vector[] right = new vector[]{put(l, h, -w), put(l, h, w), put(l, -h, w), put(l, -h, -w)};
+		boundary[1] = new polygon3D(right, null, null, null, null, 0,0,0);
+		vector[] back = new vector[]{put(-l, h, -w), put(l, h, -w), put(l, -h, -w), put(-l, -h, -w)};
+		boundary[2] = new polygon3D(back, null, null, null, null, 0,0,0);
+		vector[] left = new vector[]{put(-l, h, w), put(-l, h, -w), put(-l, -h, -w), put(-l, -h, w)};
+		boundary[3] = new polygon3D(left, null, null, null, null, 0,0,0);
+		vector[] top = new vector[]{put(-l, h, w), put(l, h, w), put(l, h, -w), put(-l, h, -w)};
+		boundary[4] = new polygon3D(top, null, null, null, null, 0,0,0);
 	}
 
 	//if all the boundary polygons are rendered not visible,
@@ -88,15 +88,15 @@ public abstract class SolidObject implements Model {
 	//the centre of the model is cauculated by averaging the centres
 	//of the first 4 polygons from the boundary
 	public final void findCentre(){
-		centre = new Vector(0,0,0);
+		centre = new vector(0,0,0);
 		for(int i = 0; i < 4; i++)
 			centre.add(boundary[i].centre);
 		centre.scale(1.0/4);
 	}
 	
 	//create a arbitrary vertex
-	public final Vector put(double i, double j, double k){
-		Vector temp = start.myClone();
+	public final vector put(double i, double j, double k){
+		vector temp = start.myClone();
 		temp.add(iDirection, i);
 		temp.add(jDirection, j);
 		temp.add(kDirection, k);
@@ -104,7 +104,7 @@ public abstract class SolidObject implements Model {
 	}
 	
 	//change the 3d geometry of a vertex
-	public final void change(double i, double j, double k, Vector v){
+	public final void change(double i, double j, double k, vector v){
 		v.set(start);
 		v.add(iDirection, i);
 		v.add(jDirection, j);

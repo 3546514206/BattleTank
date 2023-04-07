@@ -1,26 +1,26 @@
 package core;
 //The tank that controlled by user
-public class PlayerTank extends SolidObject {
+public class playerTank extends solidObject{
 	//polygons that made up the tank body
-	private Polygon3D[] body;
+	private polygon3D[] body;
 	
 	//total angle that the body has rotated from the initial position. (in the x-z plane)
 	private int bodyAngle;
 	
 	//the centre of the body in camera coordinate
-	public static Vector bodyCenter;
+	public static vector bodyCenter;
 	
 	//polygons that made up the tank turret
-	private Polygon3D[] turret;
+	private polygon3D[] turret;
 	
 	//the shadow of tank body
-	private Polygon3D shadowBody;
+	private polygon3D shadowBody;
 	
 	//the shadow of tank turret
-	private Polygon3D shadowTurret;
+	private polygon3D shadowTurret;
 	
 	//the centre of the turret (pivot point for rotation)
-	public static Vector turretCenter;
+	public static vector turretCenter;
 	
 	//total angle that the turret has rotated from the initial position. (in the x-z plane)
 	public static int turretAngle;
@@ -32,7 +32,7 @@ public class PlayerTank extends SolidObject {
 	private int angularSpeed;
 	
 	//polygons of nuke Cannon
-	private Polygon3D[] nukeCannonRear, nukeCannonMiddle, nukeCannonFront;
+	private polygon3D[] nukeCannonRear, nukeCannonMiddle, nukeCannonFront; 
 	
 	//movement flag
 	public static boolean forward, backward, turnRight, turnLeft, moveRight, moveLeft, firing;
@@ -61,7 +61,7 @@ public class PlayerTank extends SolidObject {
 	public boolean outOfAmmo;
 	
 	//change in tank's position of each frame
-	public static Vector displacement = new Vector(0,0,0);
+	public static vector displacement = new vector(0,0,0);
 	
 	//degrees the tank body has rotated in a frame
 	private int bodyAngleDelta;
@@ -76,13 +76,13 @@ public class PlayerTank extends SolidObject {
 	int position;
 	
 	//temporary vectors which will be used for vector arithmetic
-	private Vector tempVector1 = new Vector(0,0,0);
-	private Vector tempVector2 = new Vector(0,0,0);
+	private vector tempVector1 = new vector(0,0,0);
+	private vector tempVector2 = new vector(0,0,0);
 	
 	//time that the  player is underattack
 	private int underAttackCount;
 	
-	public PlayerTank(double x, double y, double z){
+	public playerTank(double x, double y, double z){
 		//init ammunition counts
 		
 		shells = 50;
@@ -91,10 +91,10 @@ public class PlayerTank extends SolidObject {
 		plasma = 0;
 		
 		//define the center point of this model(also the centre point of tank body)
-		start = new Vector(x,y,z);
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,0.95,0);
-		kDirection = new Vector(0,0,1.05);
+		start = new vector(x,y,z);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,0.95,0);
+		kDirection = new vector(0,0,1.05);
 		
 		turretAngle = 0;
 		bodyAngle = 0;
@@ -104,9 +104,9 @@ public class PlayerTank extends SolidObject {
 		makeBoundary(0.1, 0.25, 0.1);
 		
 		//create 2D boundary
-		boundary2D = new Rectangle2D(x - 0.07, z + 0.07, 0.14, 0.14);
+		boundary2D = new rectangle2D(x - 0.07, z + 0.07, 0.14, 0.14);
 		position = (int)(x*4) + (129-(int)(z*4))*80;
-		ObstacleMap.registerObstacle2(this, position);
+		obstacleMap.registerObstacle2(this, position);
 		
 		
 		
@@ -124,63 +124,63 @@ public class PlayerTank extends SolidObject {
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	
 	//create polygons for the tank body
 	public void makeBody(){
-		Vector[] v;
+		vector[] v;
 		
-		body = new Polygon3D[11];
+		body = new polygon3D[11];
 		
-		v = new Vector[]{put(-0.07, 0.025, 0.11), put(-0.07, 0.025, -0.11), put(-0.07, 0.005, -0.11), put(-0.07, -0.025, -0.08), put(-0.07, -0.025, 0.07), put(-0.07, 0.005, 0.11)};
-		body[0] = new Polygon3D(v, put(-0.07, 0.027, 0.11), put(-0.07, 0.027, -0.11), put(-0.07, -0.025, 0.11), Main.textures[12], 1,1,6);
+		v = new vector[]{put(-0.07, 0.025, 0.11), put(-0.07, 0.025, -0.11), put(-0.07, 0.005, -0.11), put(-0.07, -0.025, -0.08), put(-0.07, -0.025, 0.07), put(-0.07, 0.005, 0.11)};
+		body[0] = new polygon3D(v, put(-0.07, 0.027, 0.11), put(-0.07, 0.027, -0.11), put(-0.07, -0.025, 0.11), main.textures[12], 1,1,6);
 		
-		v = new Vector[]{put(0.07, 0.005, 0.11), put(0.07, -0.025, 0.07), put(0.07, -0.025, -0.08), put(0.07, 0.005, -0.11), put(0.07, 0.025, -0.11), put(0.07, 0.025, 0.11)};
-		body[1] = new Polygon3D(v, put(0.07, 0.027, -0.11),put(0.07, 0.027, 0.11), put(0.07, -0.025, -0.11), Main.textures[12], 1,1,6);
+		v = new vector[]{put(0.07, 0.005, 0.11), put(0.07, -0.025, 0.07), put(0.07, -0.025, -0.08), put(0.07, 0.005, -0.11), put(0.07, 0.025, -0.11), put(0.07, 0.025, 0.11)};
+		body[1] = new polygon3D(v, put(0.07, 0.027, -0.11),put(0.07, 0.027, 0.11), put(0.07, -0.025, -0.11), main.textures[12], 1,1,6);
 		
-		v = new Vector[]{put(-0.06, 0.055, 0.05), put(0.06, 0.055, 0.05), put(0.06, 0.055, -0.1), put(-0.06, 0.055, -0.1)};
-		body[2] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[11], 1,0.9,6);
+		v = new vector[]{put(-0.06, 0.055, 0.05), put(0.06, 0.055, 0.05), put(0.06, 0.055, -0.1), put(-0.06, 0.055, -0.1)};
+		body[2] = new polygon3D(v, v[0], v[1], v [3], main.textures[11], 1,0.9,6);
 		
-		v = new Vector[]{put(-0.07, 0.04, 0.11), put(0.07, 0.04, 0.11), put(0.06, 0.055, 0.05), put(-0.06, 0.055, 0.05)};
-		body[3] = new Polygon3D(v, v[2], v[3], v [1], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.04, 0.11), put(0.07, 0.04, 0.11), put(0.06, 0.055, 0.05), put(-0.06, 0.055, 0.05)};
+		body[3] = new polygon3D(v, v[2], v[3], v [1], main.textures[11], 1,0.3,6);
 	
-		v = new Vector[]{put(-0.06, 0.055, 0.05),put(-0.06, 0.055, -0.1), put(-0.07, 0.04, -0.11), put(-0.07, 0.04, 0.11)};
-		body[4] = new Polygon3D(v, v[2], v[3], v [1], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(-0.06, 0.055, 0.05),put(-0.06, 0.055, -0.1), put(-0.07, 0.04, -0.11), put(-0.07, 0.04, 0.11)};
+		body[4] = new polygon3D(v, v[2], v[3], v [1], main.textures[11], 1,0.3,6);
 	
-		v = new Vector[]{put(0.07, 0.04, 0.11), put(0.07, 0.04, -0.11), put(0.06, 0.055, -0.1),put(0.06, 0.055, 0.05)};
-		body[5] = new Polygon3D(v, v[2], v[3], v [1], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(0.07, 0.04, 0.11), put(0.07, 0.04, -0.11), put(0.06, 0.055, -0.1),put(0.06, 0.055, 0.05)};
+		body[5] = new polygon3D(v, v[2], v[3], v [1], main.textures[11], 1,0.3,6);
 		
-		v = new Vector[]{put(-0.06, 0.055, -0.1), put(0.06, 0.055, -0.1), put(0.07, 0.04, -0.11), put(-0.07, 0.04, -0.11)};
-		body[6] = new Polygon3D(v, v[2], v[3], v [1], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(-0.06, 0.055, -0.1), put(0.06, 0.055, -0.1), put(0.07, 0.04, -0.11), put(-0.07, 0.04, -0.11)};
+		body[6] = new polygon3D(v, v[2], v[3], v [1], main.textures[11], 1,0.3,6);
 		
-		v = new Vector[]{put(0.07, 0.04, 0.11), put(-0.07, 0.04, 0.11), put(-0.07, 0.01, 0.11), put(0.07, 0.01, 0.11)};
-		body[7] = new Polygon3D(v, v[2], v[3], v [1], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(0.07, 0.04, 0.11), put(-0.07, 0.04, 0.11), put(-0.07, 0.01, 0.11), put(0.07, 0.01, 0.11)};
+		body[7] = new polygon3D(v, v[2], v[3], v [1], main.textures[11], 1,0.3,6);
 	
-		v = new Vector[]{put(-0.07, 0.04, 0.11), put(-0.07, 0.04, -0.11), put(-0.07, 0.015, -0.11), put(-0.07, 0.005, -0.09), put(-0.07, 0.005, 0.09),put(-0.07, 0.015, 0.11)};
-		body[8] = new Polygon3D(v, put(-0.07, 0.04, 0.11), put(-0.07, 0.04, -0.11), put(-0.07, 0.025, 0.11), Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.04, 0.11), put(-0.07, 0.04, -0.11), put(-0.07, 0.015, -0.11), put(-0.07, 0.005, -0.09), put(-0.07, 0.005, 0.09),put(-0.07, 0.015, 0.11)};
+		body[8] = new polygon3D(v, put(-0.07, 0.04, 0.11), put(-0.07, 0.04, -0.11), put(-0.07, 0.025, 0.11), main.textures[11], 1,0.3,6);
 	
-		v = new Vector[]{put(0.07, 0.015, 0.11), put(0.07, 0.005, 0.09), put(0.07, 0.005, -0.09), put(0.07, 0.015, -0.11), put(0.07, 0.04, -0.11),put(0.07, 0.04, 0.11)};
-		body[9] = new Polygon3D(v, put(0.07, 0.04, 0.11), put(0.07, 0.04, -0.11), put(0.07, 0.025, 0.11), Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(0.07, 0.015, 0.11), put(0.07, 0.005, 0.09), put(0.07, 0.005, -0.09), put(0.07, 0.015, -0.11), put(0.07, 0.04, -0.11),put(0.07, 0.04, 0.11)};
+		body[9] = new polygon3D(v, put(0.07, 0.04, 0.11), put(0.07, 0.04, -0.11), put(0.07, 0.025, 0.11), main.textures[11], 1,0.3,6);
 	
-		v = new Vector[]{put(-0.07, 0.04, -0.11), put(0.07, 0.04, -0.11), put(0.07, 0.015, -0.11), put(-0.07, 0.015, -0.11)};
-		body[10] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[11], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.04, -0.11), put(0.07, 0.04, -0.11), put(0.07, 0.015, -0.11), put(-0.07, 0.015, -0.11)};
+		body[10] = new polygon3D(v, v[0], v[1], v [3], main.textures[11], 1,0.3,6);
 		
 		turretCenter = put(0, 0.055, -0.02);
 		
 		//create shadow for tank body
 		start.add(-0.025, 0, -0.02);
 		start.y = -1;
-		v = new Vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
-		shadowBody = new Polygon3D(v, v[0], v[1], v[3], Main.textures[14], 1, 1, 2);
+		v = new vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
+		shadowBody = new polygon3D(v, v[0], v[1], v[3], main.textures[14], 1, 1, 2);
 	}
 	
 	//create polygons for the tank turret (cannon turret)
 	public void makeTurretCannon(){
 		start = turretCenter.myClone();
-		Vector[] v;
-		turret = new Polygon3D[10];
+		vector[] v;
+		turret = new polygon3D[10];
 		
 		iDirection.set(1,0,0);
 		jDirection.set(0,0.95,0);
@@ -191,48 +191,48 @@ public class PlayerTank extends SolidObject {
 		kDirection.rotate_XZ(turretAngle);
 		
 	
-		v = new Vector[]{put(0, 0.025, 0.18), put(0.004, 0.022, 0.18), put(0.007, 0.022, 0.06), put(0, 0.025, 0.06)};
-		turret[0] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.1,1,6);
+		v = new vector[]{put(0, 0.025, 0.18), put(0.004, 0.022, 0.18), put(0.007, 0.022, 0.06), put(0, 0.025, 0.06)};
+		turret[0] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.1,1,6);
 		
-		v = new Vector[]{ put(0, 0.025, 0.06), put(-0.007, 0.022, 0.06), put(-0.004, 0.022, 0.18),put(0, 0.025, 0.18)};
-		turret[1] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.1,1,6);
+		v = new vector[]{ put(0, 0.025, 0.06), put(-0.007, 0.022, 0.06), put(-0.004, 0.022, 0.18),put(0, 0.025, 0.18)};
+		turret[1] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.1,1,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
-		turret[2] = new Polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), Main.textures[13], 0.8,0.8,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
+		turret[2] = new polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), main.textures[13], 0.8,0.8,6);
 		
-		v = new Vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
-		turret[3] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
+		turret[3] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
-		turret[4] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
+		turret[4] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
-		turret[5] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
+		turret[5] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v  = new Vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
-		turret[6] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
+		turret[6] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v  = new Vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
-		turret[7] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
+		turret[7] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
-		turret[8] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
+		turret[8] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
-		v = new Vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
-		turret[9] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
+		turret[9] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
 		//create shadow for tank turret (cannon)
 		start.add(-0.04, 0, -0.04);
 		start.y = -1;
-		v = new Vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
-		shadowTurret = new Polygon3D(v, v[0], v[1], v[3], Main.textures[15], 1, 1, 2);
+		v = new vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
+		shadowTurret = new polygon3D(v, v[0], v[1], v[3], main.textures[15], 1, 1, 2);
 	}
 	
 	//create polygons for the tank turret (rocket turret)
 	public void makeTurretRocket(){
 		start = turretCenter.myClone();
-		Vector[] v;
-		turret = new Polygon3D[35];
+		vector[] v;
+		turret = new polygon3D[35];
 		
 		iDirection.set(1,0,0);
 		jDirection.set(0,0.95,0);
@@ -243,17 +243,17 @@ public class PlayerTank extends SolidObject {
 		kDirection.rotate_XZ(turretAngle);
 		
 		
-		v  = new Vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
-		turret[0] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
+		turret[0] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v  = new Vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
-		turret[1] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
+		turret[1] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
-		turret[2] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
+		turret[2] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
-		v = new Vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
-		turret[3] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
+		turret[3] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
 		
 		double r = 0.015;
@@ -262,67 +262,67 @@ public class PlayerTank extends SolidObject {
 		start = put(0.068,0,0);
 		
 		for(int i = 0; i < 16; i++){
-			v = new Vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.03),
+			v = new vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.03),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), -0.03),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), 0.03),
 							 put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.03)
 							};
-			turret[i + 4] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[25], 0.1,0.1,6);
+			turret[i + 4] = new polygon3D(v, v[0], v[1], v [3],  main.textures[25], 0.1,0.1,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(0.068,0,0.01);
 		
 		for(int i = 0; i < 8; i++){
-			v = new Vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.004),
+			v = new vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.004),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), -0.004),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), 0.004),
 							 put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.004)
 							};
-			turret[i + 20] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[26], 0.1,0.1,6);
+			turret[i + 20] = new polygon3D(v, v[0], v[1], v [3],  main.textures[26], 0.1,0.1,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(0.068,0,0);
 		
-		v = new Vector[16];
+		v = new vector[16];
 		for(int i = 1; i < 17; i++)
 			v[16 - i] = put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.03);
-		turret[28] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[25], 1,1,6);
+		turret[28] = new polygon3D(v, v[0], v[1], v [3],  main.textures[25], 1,1,6);
 		
 		
 		
 		start.set(tempVector1);
-		v = new Vector[]{put(0, 0.025, 0.18), put(0.004, 0.022, 0.18), put(0.007, 0.022, 0.06), put(0, 0.025, 0.06)};
-		turret[29] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.1,1,6);
+		v = new vector[]{put(0, 0.025, 0.18), put(0.004, 0.022, 0.18), put(0.007, 0.022, 0.06), put(0, 0.025, 0.06)};
+		turret[29] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.1,1,6);
 		
-		v = new Vector[]{ put(0, 0.025, 0.06), put(-0.007, 0.022, 0.06), put(-0.004, 0.022, 0.18),put(0, 0.025, 0.18)};
-		turret[30] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.1,1,6);
+		v = new vector[]{ put(0, 0.025, 0.06), put(-0.007, 0.022, 0.06), put(-0.004, 0.022, 0.18),put(0, 0.025, 0.18)};
+		turret[30] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.1,1,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
-		turret[31] = new Polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), Main.textures[13], 0.8,0.8,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
+		turret[31] = new polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), main.textures[13], 0.8,0.8,6);
 		
-		v = new Vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
-		turret[32] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
+		turret[32] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
-		turret[33] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
+		turret[33] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
-		turret[34] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
+		turret[34] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
 		//create shadow for tank turret (cannon)
 		start.add(-0.04, 0, -0.04);
 		start.y = -1;
-		v = new Vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
-		shadowTurret = new Polygon3D(v, v[0], v[1], v[3], Main.textures[15], 1, 1, 2);
+		v = new vector[]{put(-0.2, 0, 0.2), put(0.2, 0, 0.2), put(0.2, 0, -0.2), put(-0.2, 0, -0.2)};
+		shadowTurret = new polygon3D(v, v[0], v[1], v[3], main.textures[15], 1, 1, 2);
 	}
 	
 	//create polygons for the tank turret (railgun turret)
 	public void makeTurretRailgun(){
 		start = turretCenter.myClone();
-		Vector[] v;
-		turret = new Polygon3D[72];
+		vector[] v;
+		turret = new polygon3D[72];
 		
 		iDirection.set(1,0,0);
 		jDirection.set(0,0.95,0);
@@ -338,21 +338,21 @@ public class PlayerTank extends SolidObject {
 		start = put(0,0,0.12);
 		
 		for(int i = 0; i < 32; i++){
-			v = new Vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.06),
+			v = new vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), -0.06),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), -0.06),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), 0.06),
 							 put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.06)
 							};
-			turret[i] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			turret[i] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		for(int i = 32; i < 64; i++){
-			v = new Vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.05),
+			v = new vector[]{put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.05),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), 0.05),
 							 put(r*Math.cos((i+1)*theta), r*Math.sin((i+1)*theta), 0.06),
 							 put(r*Math.cos(i*theta), r*Math.sin(i*theta), 0.06)
 							};
-			turret[i] = new Polygon3D(v, v[0], v[1], v[3],  Main.textures[23], 0.01,0.01,6);
+			turret[i] = new polygon3D(v, v[0], v[1], v[3],  main.textures[23], 0.01,0.01,6);
 		}
 		
 		
@@ -362,41 +362,41 @@ public class PlayerTank extends SolidObject {
 		
 		
 		start.set(tempVector1);
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
-		turret[64] = new Polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), Main.textures[13], 0.8,0.8,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
+		turret[64] = new polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), main.textures[13], 0.8,0.8,6);
 		
-		v = new Vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
-		turret[65] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
+		turret[65] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
-		turret[66] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
+		turret[66] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
-		turret[67] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
+		turret[67] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v  = new Vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
-		turret[68] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
+		turret[68] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v  = new Vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
-		turret[69] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
+		turret[69] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
-		turret[70] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
+		turret[70] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
-		v = new Vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
-		turret[71] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
+		turret[71] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
 		//create shadow for tank turret (railgun)
 		start.add(-0.04, 0, -0.04);
 		start.y = -1;
-		v = new Vector[]{put(-0.5, 0, 0.2), put(0.5, 0, 0.2), put(0.5, 0, -0.2), put(-0.5, 0, -0.2)};
-		shadowTurret = new Polygon3D(v, v[0], v[1], v[3], Main.textures[15], 1, 1, 2);
+		v = new vector[]{put(-0.5, 0, 0.2), put(0.5, 0, 0.2), put(0.5, 0, -0.2), put(-0.5, 0, -0.2)};
+		shadowTurret = new polygon3D(v, v[0], v[1], v[3], main.textures[15], 1, 1, 2);
 	}
 	
 	public void makeTurretNuke(){
 		start = turretCenter.myClone();
-		Vector[] v;
-		turret = new Polygon3D[171];
+		vector[] v;
+		turret = new polygon3D[171];
 		int polyIndex = 0;
 		
 		
@@ -431,64 +431,64 @@ public class PlayerTank extends SolidObject {
 		tempVector1.set(start);
 		
 		start = put(0.017,0.017,0.1);
-		nukeCannonRear = new Polygon3D[72];
+		nukeCannonRear = new polygon3D[72];
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.06),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.06)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.06),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.06)
 							};
-			nukeCannonRear[i] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonRear[i] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(-0.017,0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.06),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.06)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.06),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.06)
 							};
-			nukeCannonRear[i + 18] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonRear[i + 18] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(-0.017,-0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.06),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.06)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.06),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.06)
 							};
-			nukeCannonRear[i + 36] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonRear[i + 36] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(0.017,-0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], -0.04),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.06),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.06)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], -0.04),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.06),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.06)
 							};
-			nukeCannonRear[i + 54] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonRear[i + 54] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		r = 0.045;
-		nukeCannonMiddle = new Polygon3D[19];
+		nukeCannonMiddle = new polygon3D[19];
 		
-		v = new Vector[18];
+		v = new vector[18];
 		for(int i = 1; i < 19; i++)
-			v[18 - i] = put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.16);
-		nukeCannonMiddle[0] = new Polygon3D(v, put(-0.2, 0.2, 0), put(0.2, 0.2, 0), put(-0.2, -0.2, 0),  Main.textures[13], 0.001,0.01,6);
+			v[18 - i] = put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.16);
+		nukeCannonMiddle[0] = new polygon3D(v, put(-0.2, 0.2, 0), put(0.2, 0.2, 0), put(-0.2, -0.2, 0),  main.textures[13], 0.001,0.01,6);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.16),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.16),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.167),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.167)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.16),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.16),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.167),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.167)
 							};
-			nukeCannonMiddle[i + 1] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonMiddle[i + 1] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		
@@ -496,47 +496,47 @@ public class PlayerTank extends SolidObject {
 		r = 0.012;
 		tempVector1.set(start);
 		start = put(0.017,0.017,0.1);
-		nukeCannonFront = new Polygon3D[72];
+		nukeCannonFront = new polygon3D[72];
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta],0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.1),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.1)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta],0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.1),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.1)
 							};
-			nukeCannonFront[i] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonFront[i] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(-0.017,0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.1),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.1)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.1),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.1)
 							};
-			nukeCannonFront[i + 18] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonFront[i + 18] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(-0.017,-0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.1),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.1)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.1),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.1)
 							};
-			nukeCannonFront[i + 36] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonFront[i + 36] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		start.set(tempVector1);
 		start = put(0.017,-0.017,0.1);
 		for(int i = 0; i < 18; i++){
-			v = new Vector[]{put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.07),
-							 put(r* GameData.cos[(i+1)*theta], r* GameData.sin[(i+1)*theta], 0.1),
-							 put(r* GameData.cos[i*theta], r* GameData.sin[i*theta], 0.1)
+			v = new vector[]{put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.07),
+							 put(r*gameData.cos[(i+1)*theta], r*gameData.sin[(i+1)*theta], 0.1),
+							 put(r*gameData.cos[i*theta], r*gameData.sin[i*theta], 0.1)
 							};
-			nukeCannonFront[i + 54] = new Polygon3D(v, v[0], v[1], v [3],  Main.textures[13], 0.001,0.01,6);
+			nukeCannonFront[i + 54] = new polygon3D(v, v[0], v[1], v [3],  main.textures[13], 0.001,0.01,6);
 		}
 		
 		
@@ -572,40 +572,40 @@ public class PlayerTank extends SolidObject {
 		
 		
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
-		turret[0 + polyIndex] = new Polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), Main.textures[13], 0.8,0.8,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(0.04, 0.035, 0.06), put(0.05, 0.035, 0.04), put(0.05, 0.035, -0.03), put(0.03, 0.035, -0.07),  put(-0.03, 0.035, -0.07),put(-0.05, 0.035, -0.03), put(-0.05, 0.035, 0.04)};
+		turret[0 + polyIndex] = new polygon3D(v, put(-0.04, 0.035, 0.19), put(0.04, 0.035, 0.19), put(-0.04, 0.035, 0.09), main.textures[13], 0.8,0.8,6);
 		
-		v = new Vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
-		turret[1 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0, -0.07), put(-0.03, 0, -0.07),  put(-0.03, 0.035, -0.07),   put(0.03, 0.035, -0.07)};
+		turret[1 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
-		turret[2 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(0.03, 0.035, -0.07), put(0.05, 0.035, -0.03), put(0.05, 0, -0.03), put(0.03, 0, -0.07)};
+		turret[2 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v = new Vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
-		turret[3 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.6,0.3,6);
+		v = new vector[]{put(-0.03, 0, -0.07), put(-0.05, 0, -0.03), put(-0.05, 0.035, -0.03), put(-0.03, 0.035, -0.07)};
+		turret[3 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.6,0.3,6);
 		
-		v  = new Vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
-		turret[4 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(-0.05, 0.035, 0.04), put(-0.05, 0.035, -0.03), put(-0.05, 0, -0.03), put(-0.05, 0, 0.04)};
+		turret[4 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v  = new Vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
-		turret[5 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.5,0.2,6);
+		v  = new vector[]{put(0.05, 0, 0.04), put(0.05, 0, -0.03), put(0.05, 0.035, -0.03), put(0.05, 0.035, 0.04)};
+		turret[5 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.5,0.2,6);
 		
-		v = new Vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
-		turret[6 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(-0.04, 0.035, 0.06), put(-0.05, 0.035, 0.04), put(-0.05, 0, 0.04), put(-0.04, 0, 0.06)};
+		turret[6 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
-		v = new Vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
-		turret[7 + polyIndex] = new Polygon3D(v, v[0], v[1], v [3], Main.textures[13], 0.2,0.2,6);
+		v = new vector[]{put(0.04, 0, 0.06), put(0.05, 0, 0.04), put(0.05, 0.035, 0.04), put(0.04, 0.035, 0.06)};
+		turret[7 + polyIndex] = new polygon3D(v, v[0], v[1], v [3], main.textures[13], 0.2,0.2,6);
 		
 		start.add(-0.05, 0, -0.02);
 		start.y = -1;
-		v = new Vector[]{put(-0.7, 0, 0.2), put(0.7, 0, 0.2), put(0.7, 0, -0.2), put(-0.7, 0, -0.2)};
-		shadowTurret = new Polygon3D(v, v[0], v[1], v[3], Main.textures[15], 1, 1, 2);
+		v = new vector[]{put(-0.7, 0, 0.2), put(0.7, 0, 0.2), put(0.7, 0, -0.2), put(-0.7, 0, -0.2)};
+		shadowTurret = new polygon3D(v, v[0], v[1], v[3], main.textures[15], 1, 1, 2);
 	}
 	
 	//update model 
 	public void update(){
 		//don't update player tank when game is finished
-		if(Main.gameOver)
+		if(main.gameOver)
 			return;
 		
 		
@@ -613,8 +613,8 @@ public class PlayerTank extends SolidObject {
 			underAttackCount--;
 		
 		//slowly regenerate hp
-		if(HP < 150 && HP > 0 && underAttackCount == 0 && !Main.gamePaused){
-			if(Main.timer%2 == 0)
+		if(HP < 150 && HP > 0 && underAttackCount == 0 && !main.gamePaused){
+			if(main.timer%2 == 0)
 				HP+=1;
 		}
 		
@@ -624,7 +624,7 @@ public class PlayerTank extends SolidObject {
 		
 		//the player tank is always rendered visible		
 		visible = true;
-		ModelDrawList.register(this);
+		modelDrawList.register(this);
 		
 		//Process user's commands:
 		//Rotate tank turret to right/left
@@ -705,12 +705,12 @@ public class PlayerTank extends SolidObject {
 		//If the result is positive, then move back to last known good location.
 		int newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
 		
-		if(ObstacleMap.collideWithObstacle1(this, newPosition)){
+		if(obstacleMap.collideWithObstacle1(this, newPosition)){
 			displacement.scale(-1);
 			boundary2D.update(displacement);
 			centre.add(displacement);
 			displacement.set(0,0,0);
-		}else if(ObstacleMap.collideWithObstacle2(this, newPosition)){
+		}else if(obstacleMap.collideWithObstacle2(this, newPosition)){
 			displacement.scale(-1);
 			boundary2D.update(displacement);
 			centre.add(displacement);
@@ -723,9 +723,9 @@ public class PlayerTank extends SolidObject {
 			displacement.set(0,0,0);
 		}else{
 			//if no collision is detected, update tile index
-			if(!ObstacleMap.isOccupied(newPosition)){
-				ObstacleMap.removeObstacle2(position);
-				ObstacleMap.registerObstacle2(this, newPosition);
+			if(!obstacleMap.isOccupied(newPosition)){
+				obstacleMap.removeObstacle2(position);
+				obstacleMap.registerObstacle2(this, newPosition);
 				position = newPosition;
 			
 			}
@@ -744,9 +744,9 @@ public class PlayerTank extends SolidObject {
 		//find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		
 		//update body polygons
 		for(int i = 0; i < body.length; i++){
@@ -806,7 +806,7 @@ public class PlayerTank extends SolidObject {
 		}
 		
 		shadowBody.update();
-		Rasterizer.rasterize(shadowBody);
+		rasterizer.rasterize(shadowBody);
 		
 		
 		
@@ -860,8 +860,8 @@ public class PlayerTank extends SolidObject {
 		}
 		
 		if(currentWeapon == 4){
-			Geometry.sortPolygons(nukeCannonRear, 0);
-			Geometry.sortPolygons(nukeCannonFront, 0);
+			geometry.sortPolygons(nukeCannonRear, 0);
+			geometry.sortPolygons(nukeCannonFront, 0);
 			
 			int index = 0;
 			
@@ -917,14 +917,14 @@ public class PlayerTank extends SolidObject {
 		}
 		
 		shadowTurret.update();
-		Rasterizer.rasterize(shadowTurret);
+		rasterizer.rasterize(shadowTurret);
 		
 		
 		
 		
 		
 		//handle attack event
-		if(currentCoolDown > 0 && !Main.gamePaused)
+		if(currentCoolDown > 0 && !main.gamePaused)
 			currentCoolDown--;
 		if(firing){
 			if(currentCoolDown == 0){
@@ -932,11 +932,11 @@ public class PlayerTank extends SolidObject {
 					shells--;
 					currentCoolDown = coolDowns[currentWeapon];
 					//calculate shell direction
-					Vector direction = new Vector(0,0,1);
+					vector direction = new vector(0,0,1);
 					direction.rotate_XZ(turretAngle);
 					direction.scale(0.02);
 					direction.add(turretCenter);
-					Projectiles.register(new Shell(direction.x, direction.y,direction.z, turretAngle,false, 0));
+					projectiles.register(new shell(direction.x, direction.y,direction.z, turretAngle,false, 0));
 					if(shells == 0)
 						outOfAmmo = true;
 					
@@ -945,26 +945,26 @@ public class PlayerTank extends SolidObject {
 					rockets--;
 					currentCoolDown = coolDowns[currentWeapon];
 					//calculate initial rocket direction
-					Vector tempVector1 = new Vector(0,0,1);
+					vector tempVector1 = new vector(0,0,1);
 					tempVector1.rotate_XZ((turretAngle+270)%360);
 					tempVector1.scale(0.08);
-					Vector direction = new Vector(0,0,1);
+					vector direction = new vector(0,0,1);
 					direction.rotate_XZ(turretAngle);
 					direction.scale(0.05);
 					direction.add(turretCenter);
 					direction.add(tempVector1);
-					Projectiles.register(new Rocket(direction.x, direction.y,direction.z, turretAngle ,false));
+					projectiles.register(new rocket(direction.x, direction.y,direction.z, turretAngle ,false));
 					if(rockets == 0)
 						outOfAmmo = true;
 				}else if(currentWeapon == 3 && slugs > 0){
 					slugs--;
 					currentCoolDown = coolDowns[currentWeapon];
 					//calculate slug direction
-					Vector direction = new Vector(0,0,1);
+					vector direction = new vector(0,0,1);
 					direction.rotate_XZ(turretAngle);
 					direction.scale(0.1);
 					direction.add(turretCenter);
-					new RailgunTail(direction, turretAngle, false);
+					new railgunTail(direction, turretAngle, false);
 					if(slugs == 0)
 						outOfAmmo = true;
 					
@@ -973,11 +973,11 @@ public class PlayerTank extends SolidObject {
 						plasma--;
 						currentCoolDown = coolDowns[currentWeapon];
 						//calculate shell direction
-						Vector direction = new Vector(0,0,1);
+						vector direction = new vector(0,0,1);
 						direction.rotate_XZ(turretAngle);
 						direction.scale(0.02);
 						direction.add(turretCenter);
-						Projectiles.register(new Shell(direction.x, direction.y,direction.z, (turretAngle + Main.timer%8 +356)%360 ,false, 1));
+						projectiles.register(new shell(direction.x, direction.y,direction.z, (turretAngle + main.timer%8 +356)%360 ,false, 1));
 						
 					}else{
 						
@@ -1032,7 +1032,7 @@ public class PlayerTank extends SolidObject {
 	//draw model
 	public void draw(){
 		//dont draw play tank when game is finished
-		if(Main.gameOver)
+		if(main.gameOver)
 			return;
 		
 		//draw body
@@ -1053,11 +1053,11 @@ public class PlayerTank extends SolidObject {
 	//and each edge of the polygon will approximately equal to 360 degree.
 	public boolean outSideBorder(){
 		double angle = 0;
-		int length = Terrain.border.vertex3D.length;
+		int length = terrain.border.vertex3D.length;
 		for(int i = 0; i < length; i++){
-			tempVector1.set(Terrain.border.vertex3D[i]);
+			tempVector1.set(terrain.border.vertex3D[i]);
 			tempVector1.subtract(centre);
-			tempVector2.set(Terrain.border.vertex3D[(i+1+length)%length]);
+			tempVector2.set(terrain.border.vertex3D[(i+1+length)%length]);
 			tempVector2.subtract(centre);
 			double dot = tempVector1.dot(tempVector2);
 			dot = dot/(tempVector1.getLength())/(tempVector2.getLength());
@@ -1124,10 +1124,10 @@ public class PlayerTank extends SolidObject {
 		HP-=(damagePoint * 0.8);
 		if(HP <= 0){
 			HP = 0;
-			Projectiles.register(new Explosion(centre.x, centre.y, centre.z, 1.7));
+			projectiles.register(new explosion(centre.x, centre.y, centre.z, 1.7));
 			centre.x = 1000;
 			
-			Main.gameOver =  true;
+			main.gameOver =  true;
 		}
 		if(damagePoint > 0)
 			underAttackCount = 100;

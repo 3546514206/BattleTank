@@ -1,29 +1,29 @@
 package core;
 //enemy:  surface to surface missile launcher
-public class MissileLauncher extends SolidObject {
+public class missileLauncher extends solidObject{
 	//polygons for SSML
-	private Polygon3D[] polygons;
+	private polygon3D[] polygons;
 	
 	//polygons for  body 
-	private Polygon3D[] body;
+	private polygon3D[] body;
 	
 	//total angle that the body has rotated from the initial position. (in the x-z plane)
 	private int bodyAngle;
 	
 	//the centre of the body in camera coordinate
-	private Vector bodyCenter;
+	private vector bodyCenter;
 	
 	//polygons for missile launcher turret
-	private Polygon3D[] turret;
+	private polygon3D[] turret;
 
 	//the shadow of  body
-	private Polygon3D shadowBody;
+	private polygon3D shadowBody;
 	
 	//the shadow of  turret
-	private Polygon3D shadowTurret;
+	private polygon3D shadowTurret;
 	
 	//the centre of the turret (pivot point for rotation)
-	private Vector turretCenter;
+	private vector turretCenter;
 	
 	//total angle that the turret has rotated from the initial position. (in the x-z plane)
 	private int turretAngle;
@@ -44,7 +44,7 @@ public class MissileLauncher extends SolidObject {
 	private int currentCoolDown = 0;
 	
 	//change SSML's position of each frame
-	private Vector displacement = new Vector(0,0,0);
+	private vector displacement = new vector(0,0,0);
 	
 	//degrees body has rotated in a frame
 	private int bodyAngleDelta;
@@ -59,7 +59,7 @@ public class MissileLauncher extends SolidObject {
 	private boolean isVisiblePreviousFrame;
 	
 	//a smoke tail
-	private core.Smoke Smoke;
+	private smoke Smoke;
 	
 	//distance from player tank
 	private double distance;
@@ -74,8 +74,8 @@ public class MissileLauncher extends SolidObject {
 	private int previousTargetAngleBody;
 	
 	//temporary vectors which will be used for vector arithmetic
-	private Vector tempVector1 = new Vector(0,0,0);
-	private Vector tempVector2 = new Vector(0,0,0);
+	private vector tempVector1 = new vector(0,0,0);
+	private vector tempVector2 = new vector(0,0,0);
 	
 	// a flag which indicate whether the take will interact with player at all. (i.e some enemy only get activtied at a certain stage of the game)
 	public boolean active = true;
@@ -94,12 +94,12 @@ public class MissileLauncher extends SolidObject {
 	//random number 
 	private int randomNumber1, randomNumber2;
 	
-	public MissileLauncher(double x, double y, double z, int angle){
+	public missileLauncher(double x, double y, double z, int angle){
 		//define the center point of this model(also the centre point of tank body)
-		start = new Vector(x,y,z);
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+		start = new vector(x,y,z);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 		//adjust orientation of the model
 		iDirection.rotate_XZ(angle);
@@ -112,20 +112,20 @@ public class MissileLauncher extends SolidObject {
 		makeBoundary(0.1, 0.25, 0.1);
 		
 		//create 2D boundary
-		boundary2D = new Rectangle2D(x - 0.1, z + 0.1, 0.2, 0.2);
+		boundary2D = new rectangle2D(x - 0.1, z + 0.1, 0.2, 0.2);
 		position = (int)(x*4) + (129-(int)(z*4))*80;
-		ObstacleMap.registerObstacle2(this, position);
+		obstacleMap.registerObstacle2(this, position);
 		
 		//find centre of the model in world coordinate
 		findCentre();
 		
 		bodyCenter = centre;
 		
-		polygons = new Polygon3D[19];
+		polygons = new polygon3D[19];
 		makeBody();
 		makeTurret();
 		
-		randomNumber1 = GameData.getRandom();
+		randomNumber1 = gameData.getRandom();
 		
 		//SSML has 15 hitpoints
 		HP = 15;
@@ -138,58 +138,58 @@ public class MissileLauncher extends SolidObject {
 	
 	//create polygons for  SSML body
 	public void makeBody(){
-		Vector[] v;
+		vector[] v;
 		
 		start = bodyCenter.myClone();
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,0.8,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,0.8,0);
+		kDirection = new vector(0,0,1);
 		
 		iDirection.rotate_XZ(bodyAngle);
 		kDirection.rotate_XZ(bodyAngle);
 		
-		body = new Polygon3D[14];
-		v = new Vector[]{put(-0.07, 0.055, 0.07), put(0.07, 0.055, 0.07), put(0.07, 0.055, -0.13), put(-0.07, 0.055, -0.13)};
-		body[0] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,1,6);
+		body = new polygon3D[14];
+		v = new vector[]{put(-0.07, 0.055, 0.07), put(0.07, 0.055, 0.07), put(0.07, 0.055, -0.13), put(-0.07, 0.055, -0.13)};
+		body[0] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,1,6);
 	
-		v = new Vector[]{put(-0.069, 0.055, 0.13), put(-0.069, 0.055, -0.13), put(-0.069, 0.02, -0.13), put(-0.069, 0.02, 0.13)};
-		body[1] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.1,6);
+		v = new vector[]{put(-0.069, 0.055, 0.13), put(-0.069, 0.055, -0.13), put(-0.069, 0.02, -0.13), put(-0.069, 0.02, 0.13)};
+		body[1] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.1,6);
 		
-		v = new Vector[]{put(0.069, 0.02, 0.13), put(0.069, 0.02, -0.13), put(0.069, 0.055, -0.13), put(0.069, 0.055, 0.13)};
-		body[2] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.1,6);
+		v = new vector[]{put(0.069, 0.02, 0.13), put(0.069, 0.02, -0.13), put(0.069, 0.055, -0.13), put(0.069, 0.055, 0.13)};
+		body[2] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.1,6);
 		
-		v = new Vector[]{put(0.07, 0.1, 0.13), put(-0.07, 0.1, 0.13), put(-0.07, 0.02, 0.13), put(0.07, 0.02, 0.13)};
-		body[3] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.3,6);
+		v = new vector[]{put(0.07, 0.1, 0.13), put(-0.07, 0.1, 0.13), put(-0.07, 0.02, 0.13), put(0.07, 0.02, 0.13)};
+		body[3] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.3,6);
 		
-		v = new Vector[]{put(0.07, 0.14, 0.11), put(-0.07, 0.14, 0.11), put(-0.07, 0.1, 0.13), put(0.07, 0.1, 0.13)};
-		body[4] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[28], 1,0.3,6);
+		v = new vector[]{put(0.07, 0.14, 0.11), put(-0.07, 0.14, 0.11), put(-0.07, 0.1, 0.13), put(0.07, 0.1, 0.13)};
+		body[4] = new polygon3D(v, v[0], v[1], v[3], main.textures[28], 1,0.3,6);
 		
-		v = new Vector[]{put(0.07, 0.14, 0.07), put(0.07, 0.14, 0.11), put(0.07, 0.1, 0.13),  put(0.07, 0.055, 0.13), put(0.07, 0.055, 0.07)};
-		body[5] = new Polygon3D(v, v[0], v[1], v[4], Main.textures[27], 0.4,0.3,6);
+		v = new vector[]{put(0.07, 0.14, 0.07), put(0.07, 0.14, 0.11), put(0.07, 0.1, 0.13),  put(0.07, 0.055, 0.13), put(0.07, 0.055, 0.07)};
+		body[5] = new polygon3D(v, v[0], v[1], v[4], main.textures[27], 0.4,0.3,6);
 		
-		v = new Vector[]{put(-0.07, 0.055, 0.07),  put(-0.07, 0.055, 0.13), put(-0.07, 0.1, 0.13),put(-0.07, 0.14, 0.11), put(-0.07, 0.14, 0.07), };
-		body[6] = new Polygon3D(v, v[0], v[1], v[4], Main.textures[27], 0.4,0.3,6);
+		v = new vector[]{put(-0.07, 0.055, 0.07),  put(-0.07, 0.055, 0.13), put(-0.07, 0.1, 0.13),put(-0.07, 0.14, 0.11), put(-0.07, 0.14, 0.07), };
+		body[6] = new polygon3D(v, v[0], v[1], v[4], main.textures[27], 0.4,0.3,6);
 		
-		v = new Vector[]{put(-0.07, 0.14, 0.11), put(0.07, 0.14, 0.11), put(0.07, 0.14, 0.07), put(-0.07, 0.14, 0.07)};
-		body[7] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.14, 0.11), put(0.07, 0.14, 0.11), put(0.07, 0.14, 0.07), put(-0.07, 0.14, 0.07)};
+		body[7] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.3,6);
 		
-		v = new Vector[]{put(-0.07, 0.14, 0.07), put(0.07, 0.14, 0.07), put(0.07, 0.055, 0.07), put(-0.07, 0.055, 0.07)};
-		body[8] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.14, 0.07), put(0.07, 0.14, 0.07), put(0.07, 0.055, 0.07), put(-0.07, 0.055, 0.07)};
+		body[8] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.3,6);
 		
-		v = new Vector[]{put(-0.07, 0.055, -0.13), put(0.07, 0.055, -0.13), put(0.07, 0.02, -0.13), put(-0.07, 0.02, -0.13)};
-		body[9] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[27], 1,0.3,6);
+		v = new vector[]{put(-0.07, 0.055, -0.13), put(0.07, 0.055, -0.13), put(0.07, 0.02, -0.13), put(-0.07, 0.02, -0.13)};
+		body[9] = new polygon3D(v, v[0], v[1], v[3], main.textures[27], 1,0.3,6);
 		
-		v = new Vector[]{put(-0.07, 0.02, 0.13), put(-0.07, 0.02, -0.13), put(-0.07, -0.03, -0.11), put(-0.07, -0.03, 0.11)};
-		body[10] = new Polygon3D(v, v[0], v[1], put(-0.07, -0.03, 0.13), Main.textures[12], 1,1,6);
+		v = new vector[]{put(-0.07, 0.02, 0.13), put(-0.07, 0.02, -0.13), put(-0.07, -0.03, -0.11), put(-0.07, -0.03, 0.11)};
+		body[10] = new polygon3D(v, v[0], v[1], put(-0.07, -0.03, 0.13), main.textures[12], 1,1,6);
 		
-		v = new Vector[]{put(0.07, -0.03, 0.11), put(0.07, -0.03, -0.11), put(0.07, 0.02, -0.13), put(0.07, 0.02, 0.13)};
-		body[11] = new Polygon3D(v, v[2], v[3], put(0.07, -0.03, -0.13), Main.textures[12], 1,1,6);
+		v = new vector[]{put(0.07, -0.03, 0.11), put(0.07, -0.03, -0.11), put(0.07, 0.02, -0.13), put(0.07, 0.02, 0.13)};
+		body[11] = new polygon3D(v, v[2], v[3], put(0.07, -0.03, -0.13), main.textures[12], 1,1,6);
 		
-		v = new Vector[]{put(0.07, 0.02, 0.13), put(0.04, 0.02, 0.13), put(0.04, -0.03, 0.11),  put(0.07, -0.03, 0.11)};
-		body[12] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[12], 1,1,6);
+		v = new vector[]{put(0.07, 0.02, 0.13), put(0.04, 0.02, 0.13), put(0.04, -0.03, 0.11),  put(0.07, -0.03, 0.11)};
+		body[12] = new polygon3D(v, v[0], v[1], v[3], main.textures[12], 1,1,6);
 		
-		v = new Vector[]{put(-0.04, 0.02, 0.13), put(-0.07, 0.02, 0.13), put(-0.07, -0.03, 0.11),  put(-0.04, -0.03, 0.11)};
-		body[13] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[12], 1,1,6);
+		v = new vector[]{put(-0.04, 0.02, 0.13), put(-0.07, 0.02, 0.13), put(-0.07, -0.03, 0.11),  put(-0.04, -0.03, 0.11)};
+		body[13] = new polygon3D(v, v[0], v[1], v[3], main.textures[12], 1,1,6);
 		
 		for(int i = 0; i < body.length; i++)
 			polygons[i] = body[i];
@@ -200,20 +200,20 @@ public class MissileLauncher extends SolidObject {
 		start.add(-0.015, 0, -0.017);
 		start.y = -1;
 		
-		v = new Vector[]{put(-0.23, 0, 0.23), put(0.23, 0, 0.23), put(0.23, 0, -0.23), put(-0.23, 0, -0.23)};
-		shadowBody = new Polygon3D(v, v[0], v[1], v[3], Main.textures[14], 1, 1, 2);
+		v = new vector[]{put(-0.23, 0, 0.23), put(0.23, 0, 0.23), put(0.23, 0, -0.23), put(-0.23, 0, -0.23)};
+		shadowBody = new polygon3D(v, v[0], v[1], v[3], main.textures[14], 1, 1, 2);
 		
 	}
 	
 	//create polygons for  SSML turret
 	public void makeTurret(){
 		start = turretCenter.myClone();
-		Vector[] v;
-		turret = new Polygon3D[5];
+		vector[] v;
+		turret = new polygon3D[5];
 		
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 	
 		
@@ -227,34 +227,34 @@ public class MissileLauncher extends SolidObject {
 		
 		
 		
-		v = new Vector[]{put(-0.06, 0.055, 0.09), put(0.06, 0.055, 0.09), put(0.06, 0.055, -0.08), put(-0.06, 0.055, -0.08)};
-		turret[0] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[29], 1,1,6);
+		v = new vector[]{put(-0.06, 0.055, 0.09), put(0.06, 0.055, 0.09), put(0.06, 0.055, -0.08), put(-0.06, 0.055, -0.08)};
+		turret[0] = new polygon3D(v, v[0], v[1], v[3], main.textures[29], 1,1,6);
 		
-		v = new Vector[]{put(-0.06, 0.055, 0.09), put(-0.06, 0.055, -0.08), put(-0.06, 0.01, -0.08), put(-0.06, 0.01, 0.09)};
-		turret[1] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[29], 1,0.3,6);
+		v = new vector[]{put(-0.06, 0.055, 0.09), put(-0.06, 0.055, -0.08), put(-0.06, 0.01, -0.08), put(-0.06, 0.01, 0.09)};
+		turret[1] = new polygon3D(v, v[0], v[1], v[3], main.textures[29], 1,0.3,6);
 		
-		v = new Vector[]{put(0.06, 0.01, 0.09), put(0.06, 0.01, -0.08), put(0.06, 0.055, -0.08), put(0.06, 0.055, 0.09)};
-		turret[2] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[29], 1,0.3,6);
+		v = new vector[]{put(0.06, 0.01, 0.09), put(0.06, 0.01, -0.08), put(0.06, 0.055, -0.08), put(0.06, 0.055, 0.09)};
+		turret[2] = new polygon3D(v, v[0], v[1], v[3], main.textures[29], 1,0.3,6);
 		
-		v = new Vector[]{put(0.06, 0.055, 0.09), put(-0.06, 0.055, 0.09), put(-0.06, 0.01, 0.09),  put(0.06, 0.01, 0.09)};
-		turret[3] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[30], 1,0.5,6);
+		v = new vector[]{put(0.06, 0.055, 0.09), put(-0.06, 0.055, 0.09), put(-0.06, 0.01, 0.09),  put(0.06, 0.01, 0.09)};
+		turret[3] = new polygon3D(v, v[0], v[1], v[3], main.textures[30], 1,0.5,6);
 		
-		v = new Vector[]{put(0.06, 0.01, -0.08), put(-0.06, 0.01, -0.08), put(-0.06, 0.055, -0.08) , put(0.06, 0.055, -0.08)};
-		turret[4] = new Polygon3D(v, v[0], v[1], v[3], Main.textures[29], 1,0.5,6);
+		v = new vector[]{put(0.06, 0.01, -0.08), put(-0.06, 0.01, -0.08), put(-0.06, 0.055, -0.08) , put(0.06, 0.055, -0.08)};
+		turret[4] = new polygon3D(v, v[0], v[1], v[3], main.textures[29], 1,0.5,6);
 		
 		//create shadow for tank turret
 		start.add(-0.05, 0, -0.04);
-		iDirection = new Vector(1,0,0);
-		jDirection = new Vector(0,1,0);
-		kDirection = new Vector(0,0,1);
+		iDirection = new vector(1,0,0);
+		jDirection = new vector(0,1,0);
+		kDirection = new vector(0,0,1);
 		
 		iDirection.rotate_XZ(turretAngle);
 		kDirection.rotate_XZ(turretAngle);
 		jDirection.rotate_XZ(turretAngle);
 		
 		start.y = -1;
-		v = new Vector[]{put(-0.18, 0, 0.18), put(0.18, 0, 0.18), put(0.18, 0, -0.18), put(-0.18, 0, -0.18)};
-		shadowTurret = new Polygon3D(v, v[0], v[1], v[3], Main.textures[14], 1, 1, 2);
+		v = new vector[]{put(-0.18, 0, 0.18), put(0.18, 0, 0.18), put(0.18, 0, -0.18), put(-0.18, 0, -0.18)};
+		shadowTurret = new polygon3D(v, v[0], v[1], v[3], main.textures[14], 1, 1, 2);
 		
 		
 		for(int i = 0; i < turret.length; i++)
@@ -264,7 +264,7 @@ public class MissileLauncher extends SolidObject {
 	//update SSML
 	public void update(){
 		//retrive a random number every 1000 game frame
-		if((Main.timer+randomNumber1*3)%3000 == 0){
+		if((main.timer+randomNumber1*3)%3000 == 0){
 			if(randomNumber2 > 50)
 				randomNumber2 = 50;
 			else
@@ -272,7 +272,7 @@ public class MissileLauncher extends SolidObject {
 		}
 		
 		//process AI
-		if(countDownToDeath <= 0 && active && !Main.gamePaused){
+		if(countDownToDeath <= 0 && active && !main.gamePaused){
 			processAI();
 			
 		}
@@ -337,9 +337,9 @@ public class MissileLauncher extends SolidObject {
 		//update location in the 2d tile map
 		//validating movement is already done in  process AI part
 		int newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
-		if(!ObstacleMap.isOccupied(newPosition)){
-			ObstacleMap.removeObstacle2(position);
-			ObstacleMap.registerObstacle2(this, newPosition);
+		if(!obstacleMap.isOccupied(newPosition)){
+			obstacleMap.removeObstacle2(position);
+			obstacleMap.registerObstacle2(this, newPosition);
 			position = newPosition;
 		}
 		
@@ -359,9 +359,9 @@ public class MissileLauncher extends SolidObject {
 		//	find centre in camera coordinate
 		tempCentre.set(centre);
 		tempCentre.y = -1;
-		tempCentre.subtract(Camera.position);
-		tempCentre.rotate_XZ(Camera.XZ_angle);
-		tempCentre.rotate_YZ(Camera.YZ_angle);
+		tempCentre.subtract(camera.position);
+		tempCentre.rotate_XZ(camera.XZ_angle);
+		tempCentre.rotate_YZ(camera.YZ_angle);
 		tempCentre.updateLocation();
 		
 		//test whether the model is visible by comparing the 2D position of its centre point with the screen area
@@ -383,7 +383,7 @@ public class MissileLauncher extends SolidObject {
 		
 		//if visible then update the geometry to camera coordinate
 		if(visible){
-			ModelDrawList.register(this);
+			modelDrawList.register(this);
 			if(countDownToDeath <3){
 				
 				//update body polygons
@@ -444,7 +444,7 @@ public class MissileLauncher extends SolidObject {
 				}
 				
 				shadowBody.update();
-				Rasterizer.rasterize(shadowBody);
+				rasterizer.rasterize(shadowBody);
 				
 				//update turret center
 				turretCenter.add(displacement);
@@ -521,14 +521,14 @@ public class MissileLauncher extends SolidObject {
 					shadowTurret.vertex3D[j].add(tempVector1);
 				}
 				shadowTurret.update();
-				Rasterizer.rasterize(shadowTurret);
+				rasterizer.rasterize(shadowTurret);
 			}
 			
-			Geometry.sortPolygons(polygons, 1);
+			geometry.sortPolygons(polygons, 1);
 		}
 		
 		//handle attack event
-		if(currentCoolDown > 0 && !Main.gamePaused)
+		if(currentCoolDown > 0 && !main.gamePaused)
 			currentCoolDown--;
 		
 		
@@ -542,17 +542,17 @@ public class MissileLauncher extends SolidObject {
 				
 				currentCoolDown = coolDown;
 				//calculate shell direction
-				Vector direction = new Vector(0,0,1);
+				vector direction = new vector(0,0,1);
 				direction.rotate_XZ(turretAngle);
 				direction.scale(0.06);
-				Projectiles.register(new Rocket(centre.x+direction.x, centre.y + 0.05,centre.z+direction.z, turretAngle ,true));
+				projectiles.register(new rocket(centre.x+direction.x, centre.y + 0.05,centre.z+direction.z, turretAngle ,true));
 			}
 		}
 		
 		
 		if(HP <= 8){
 			if(Smoke == null){
-				Smoke = new Smoke(this);
+				Smoke = new smoke(this);
 			}else{
 				if(visible)
 					Smoke.update();
@@ -563,10 +563,10 @@ public class MissileLauncher extends SolidObject {
 			countDownToDeath++;
 			if(countDownToDeath >= 3){
 				if(countDownToDeath == 3){
-					Projectiles.register(new Explosion(centre.x, centre.y, centre.z, 1.7));
-					PowerUps.register(new PowerUp(centre.x, -0.875, centre.z, 2));
+					projectiles.register(new explosion(centre.x, centre.y, centre.z, 1.7));
+					powerUps.register(new powerUp(centre.x, -0.875, centre.z, 2));
 				}
-				ObstacleMap.removeObstacle2(position);
+				obstacleMap.removeObstacle2(position);
 				Smoke.stopped = true;
 			}
 			if(countDownToDeath >=40)
@@ -583,7 +583,7 @@ public class MissileLauncher extends SolidObject {
 		turretAngleDelta = 0;	
 		displacement.reset();
 		firing = false;
-		if(Main.timer%10 == 0)
+		if(main.timer%10 == 0)
 			unstuck = false;
 	}
 	
@@ -596,7 +596,7 @@ public class MissileLauncher extends SolidObject {
 
 		//calculate distance from player's tank
 		tempVector1.set(centre);
-		tempVector1.subtract(PlayerTank.bodyCenter);
+		tempVector1.subtract(playerTank.bodyCenter);
 		distance = tempVector1.getLength();
 		
 		//SSML become aware of player's tank when the distance is less than 2
@@ -626,13 +626,13 @@ public class MissileLauncher extends SolidObject {
 		
 		if(engaged){
 			//if medium tank is engaged with player, it will send alert to nearby tanks
-			if((Main.timer)%5 == 0 )
-				ObstacleMap.alertNearbyTanks(position);
+			if((main.timer)%5 == 0 )
+				obstacleMap.alertNearbyTanks(position);
 			
 			//test whether there is a type obstacle 2 between medium tank and player tank
 			//firing a vision ray from medium tank toward player tank
 			tempVector1.set(bodyCenter);
-			tempVector2.set(PlayerTank.bodyCenter);
+			tempVector2.set(playerTank.bodyCenter);
 			tempVector2.subtract(tempVector1);
 			tempVector2.unit();
 			tempVector2.scale(0.125);
@@ -641,7 +641,7 @@ public class MissileLauncher extends SolidObject {
 			double d = 0;
 			int obstacleType = -1;
 			for(int i = 0; i < 40 && d < distance;  i++, tempVector1.add(tempVector2), d+=0.125){
-				Model temp = ObstacleMap.isOccupied2(tempVector1);
+				model temp = obstacleMap.isOccupied2(tempVector1);
 				if(temp == null)
 					continue;
 				obstacleType = temp.getType();
@@ -656,8 +656,8 @@ public class MissileLauncher extends SolidObject {
 			
 			//find the angle between target and itself
 			if(clearToShoot){
-				targetAngle = 90 + (int)(180 * Math.atan((turretCenter.z - PlayerTank.bodyCenter.z)/(turretCenter.x - PlayerTank.bodyCenter.x)) / Math.PI);
-				if(PlayerTank.bodyCenter.x > turretCenter.x  && targetAngle <= 180)
+				targetAngle = 90 + (int)(180 * Math.atan((turretCenter.z - playerTank.bodyCenter.z)/(turretCenter.x - playerTank.bodyCenter.x)) / Math.PI);
+				if(playerTank.bodyCenter.x > turretCenter.x  && targetAngle <= 180)
 					targetAngle+=180;
 
 			}else{
@@ -701,8 +701,8 @@ public class MissileLauncher extends SolidObject {
 			}
 			
 			if(forward){
-				targetAngleBody = 90 + (int)(180 * Math.atan((centre.z - PlayerTank.bodyCenter.z)/(centre.x - PlayerTank.bodyCenter.x)) / Math.PI);
-				if(PlayerTank.bodyCenter.x > centre.x  && targetAngleBody <= 180)
+				targetAngleBody = 90 + (int)(180 * Math.atan((centre.z - playerTank.bodyCenter.z)/(centre.x - playerTank.bodyCenter.x)) / Math.PI);
+				if(playerTank.bodyCenter.x > centre.x  && targetAngleBody <= 180)
 					targetAngleBody+=180;
 				
 				//the enemy tank will occasionly (~once every 10 secs)perfom a 90 degree change in moving angle if:
@@ -736,10 +736,10 @@ public class MissileLauncher extends SolidObject {
 				int newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
 				boolean canMove = true;
 				//test againt type 1 & 2 obstacles
-				if(ObstacleMap.collideWithObstacle1(this, newPosition)){
+				if(obstacleMap.collideWithObstacle1(this, newPosition)){
 					forward = false;
 					canMove = false;
-				}else if(ObstacleMap.collideWithObstacle2(this, newPosition)){
+				}else if(obstacleMap.collideWithObstacle2(this, newPosition)){
 					forward = false;
 					canMove = false;
 				}
@@ -750,7 +750,7 @@ public class MissileLauncher extends SolidObject {
 				
 				if(!canMove){
 					if(unstuck){
-						ObstacleMap.giveWay(this ,position);
+						obstacleMap.giveWay(this ,position);
 					}
 					
 					
@@ -776,9 +776,9 @@ public class MissileLauncher extends SolidObject {
 					boundary2D.update(displacement);
 					newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
 					//test againt type 1 & 2 obstacles
-					if(ObstacleMap.collideWithObstacle1(this, newPosition)){
+					if(obstacleMap.collideWithObstacle1(this, newPosition)){
 						canMoveAngle1 = false;
-					}else if(ObstacleMap.collideWithObstacle2(this, newPosition)){
+					}else if(obstacleMap.collideWithObstacle2(this, newPosition)){
 						canMoveAngle1 = false;
 					}
 					displacement.scale(-1);
@@ -791,9 +791,9 @@ public class MissileLauncher extends SolidObject {
 					boundary2D.update(displacement);
 					newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
 					//test againt type 1 & 2 obstacles
-					if(ObstacleMap.collideWithObstacle1(this, newPosition)){
+					if(obstacleMap.collideWithObstacle1(this, newPosition)){
 						canMoveAngle2 = false;
-					}else if(ObstacleMap.collideWithObstacle2(this, newPosition)){
+					}else if(obstacleMap.collideWithObstacle2(this, newPosition)){
 						canMoveAngle2 = false;
 					}
 					displacement.scale(-1);
@@ -809,12 +809,12 @@ public class MissileLauncher extends SolidObject {
 						targetAngleBody = angle1;
 						forward = true;
 						stuckCount = 0;
-						ObstacleMap.giveWay(this, position);
+						obstacleMap.giveWay(this, position);
 					}else if(!canMoveAngle1 && canMoveAngle2){
 						targetAngleBody = angle2;
 						forward = true;
 						stuckCount = 0;
-						ObstacleMap.giveWay(this, position);
+						obstacleMap.giveWay(this, position);
 					}else if(canMoveAngle1 && canMoveAngle2){
 						if(Math.abs(angle1 - targetAngleBody) < Math.abs(angle2 - targetAngleBody)){
 							targetAngleBody = angle1;
@@ -832,7 +832,7 @@ public class MissileLauncher extends SolidObject {
 						stuckCount++;
 						
 						//tell surrounding units to move away
-						ObstacleMap.giveWay(this, position);
+						obstacleMap.giveWay(this, position);
 						
 						
 						
@@ -851,10 +851,10 @@ public class MissileLauncher extends SolidObject {
 				newPosition = (int)(boundary2D.xPos*4) + (129-(int)(boundary2D.yPos*4))*80;
 				
 				//test againt type 1 & 2 obstacles
-				if(ObstacleMap.collideWithObstacle1(this, newPosition)){
+				if(obstacleMap.collideWithObstacle1(this, newPosition)){
 					forward = false;
 					
-				}else if(ObstacleMap.collideWithObstacle2(this, newPosition)){
+				}else if(obstacleMap.collideWithObstacle2(this, newPosition)){
 					forward = false;
 					
 				}
@@ -879,7 +879,7 @@ public class MissileLauncher extends SolidObject {
 	}
 	
 	//return the 2D boundary of this model
-	public Rectangle2D getBoundary2D(){
+	public rectangle2D getBoundary2D(){
 		return boundary2D;
 	}
 	
